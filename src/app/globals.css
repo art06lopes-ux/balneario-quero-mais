@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/* Paleta derivada da logo (verde da mata, azul da água/deck, sol) e das fotos. */
+@theme {
+  --color-forest-950: #04180f;
+  --color-forest-900: #082f22;
+  --color-forest-800: #0b3d2e;
+  --color-forest-700: #0f5a3c;
+  --color-forest-500: #1f8a4c;
+  --color-forest-100: #e6f3ea;
+  --color-river-700: #0f5fa8;
+  --color-river-500: #1d7fd6;
+  --color-river-100: #e3f0fb;
+  --color-sun-500: #f7b500;
+  --color-sun-400: #ffc21a;
+  --color-ember-500: #f4761f;
+  --color-wa: #25d366;
+  --color-wa-dark: #1ebe5b;
+  --color-sand: #fbf7ef;
+  --color-sand-2: #f3ecdd;
+  --color-ink: #12261c;
+  --color-ink-2: #3c5247;
+  --color-ink-3: #6b7f75;
+
+  --font-display: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+
+  --shadow-soft: 0 2px 10px rgba(8, 47, 34, 0.08);
+  --shadow-card: 0 12px 34px rgba(8, 47, 34, 0.14);
+  --shadow-deep: 0 24px 64px rgba(8, 47, 34, 0.22);
+  --shadow-sun: 0 8px 24px rgba(247, 181, 0, 0.35);
+  --shadow-wa: 0 10px 30px rgba(37, 211, 102, 0.45);
+
+  --radius-xl2: 28px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+html,
+body {
+  /* Carrosséis com slides "vazando" não podem alargar a página no celular. */
+  overflow-x: clip;
+}
+body {
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Botões reutilizáveis (site público) */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-transparent px-6 py-3.5 font-display text-[0.95rem] font-bold whitespace-nowrap transition-[transform,box-shadow,background-color,color] duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sun-500/40;
+}
+.btn-lg {
+  @apply px-8 py-4 text-[1.05rem];
+}
+.btn-sun {
+  @apply bg-sun-500 text-forest-900 shadow-sun hover:bg-sun-400;
+}
+.btn-ghost {
+  @apply border-white/50 bg-white/10 text-white backdrop-blur-md hover:bg-white/20;
+}
+.btn-wa {
+  @apply bg-wa text-white shadow-wa hover:bg-wa-dark;
+}
+
+.eyebrow {
+  @apply mb-4 inline-block font-display text-[0.78rem] font-semibold tracking-[0.18em] uppercase;
+}
+
+/* Swiper: bullets com a identidade do site */
+.swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.55;
+  width: 8px;
+  height: 8px;
+  transition: all 0.25s;
+}
+.swiper-pagination-bullet-active {
+  background: var(--color-sun-500);
+  opacity: 1;
+  width: 22px;
+  border-radius: 999px;
+}
+
+/* Efeito 3D da logo: preservar profundidade nos filhos */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@keyframes heroZoom {
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes scrollHint {
+  0% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, 14px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes waPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}

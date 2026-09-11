@@ -1,93 +1,126 @@
-# Balneário Quero Mais — prévia do site
+# Balneário Quero Mais — site + painel administrativo
 
-**Isto é uma prévia visual para aprovação do cliente.** Não há backend, banco de
-dados, login, painel administrativo, pagamento nem sistema real de reservas.
-Toda a "reserva" é simulada no navegador e termina abrindo o WhatsApp com uma
-mensagem pré-preenchida.
+Site público do balneário com reserva via WhatsApp, e painel (`/admin`) onde o
+dono edita tudo: textos, fotos, preço, número de WhatsApp, galeria, comidas,
+localização e logo. Toda alteração no painel aparece no site na hora, sem
+redeploy.
 
-## Como rodar
+**Stack:** Next.js 16 (App Router) · React 19 · Tailwind 4 · Framer Motion ·
+Swiper · Supabase (Postgres + Auth + Storage).
 
-Não precisa instalar nada. Duas opções:
+A prévia estática aprovada na fase 1 ficou em [`previa-fase1/`](previa-fase1/)
+só como referência; não é usada pelo app.
 
-1. **Abrir direto:** dê dois cliques em `index.html`.
-2. **Servidor local (recomendado, evita bloqueios do navegador com `file://`):**
+---
 
-   ```bash
-   python -m http.server 5173
-   ```
+## 1. Configurar o Supabase
 
-   e abra <http://localhost:5173>. Qualquer outro servidor estático serve
-   (`npx serve .`, extensão Live Server do VS Code, etc.).
+1. Crie um projeto em <https://supabase.com> (plano gratuito serve). Região
+   recomendada: São Paulo (`sa-east-1`).
+2. No **SQL Editor** do projeto, rode, nesta ordem, o conteúdo de:
+   - `supabase/migrations/0001_schema.sql` — tabelas
+   - `supabase/migrations/0002_rls.sql` — segurança (RLS) e função `is_admin()`
+   - `supabase/migrations/0003_storage.sql` — bucket `site` de fotos
+   - `supabase/seed.sql` — conteúdo inicial (textos e fotos da prévia)
+3. Em **Authentication → Providers → Email**, deixe *Confirm email* desligado
+   (o admin é criado por script, já confirmado) e **desative o cadastro
+   público** (*Allow new users to sign up* = off). Só o administrador entra.
+4. Em **Authentication → URL Configuration**, coloque a URL do site em
+   *Site URL* e adicione `https://SEU-SITE/admin/redefinir-senha` em
+   *Redirect URLs* (é para o "esqueci minha senha").
 
-Arquivos: `index.html` (estrutura), `styles.css` (visual), `app.js` (comportamento),
-`assets/` (logo e fotos).
+## 2. Variáveis de ambiente
 
-## Trocar o número de WhatsApp
-
-O número atual é **de teste** (`+55 92 99190-1596`). Ele está definido em um
-único lugar, no topo de [`app.js`](app.js):
-
-```js
-const WHATSAPP_NUMBER = "5592991901596";
+```bash
+cp .env.example .env.local
 ```
 
-Troque por `55` + DDD + número (só dígitos). Todos os botões e links
-(hero, formulário, botão flutuante, seção de localização) usam essa constante.
+Preencha em `.env.local` (valores em *Project Settings → API*):
 
-Outros valores no mesmo arquivo: `TICKET_PRICE` (R$ 20) e `GREETING`
-(mensagem do botão flutuante).
+| Variável | O que é |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto (`https://xxxx.supabase.co`) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | chave *anon / publishable* (pública; a proteção é a RLS) |
+| `NEXT_PUBLIC_SITE_URL` | origem do site sem barra final (`http://localhost:3000` em dev) |
 
-## Sobre as imagens
+A **service_role** nunca entra em arquivo. Ela é usada uma única vez, no
+próximo passo, via variável temporária.
 
-Os arquivos originais recebidos estavam em `Downloads/balneario quero mais fotos/`.
-Foram renomeados e salvos em `assets/`:
+## 3. Criar o administrador
 
-| Arquivo em `assets/` | Original | Situação |
-| --- | --- | --- |
-| `logo.jpg` | `...15.51.33.jpeg` | Logo oficial (arquivo de imagem, usada sem recriação). |
-| `peixe-grelhado.jpg` | `...15.51.31.jpeg` | Foto real, sem interface do Instagram. Único arquivo em resolução maior (934 px). |
-| `deck-ponte.jpg` | `...15.51.31 (1).jpeg` | **Print do Instagram** — interface recortada, mas a foto ficou com 591 px de largura. |
-| `mesas-sombra.jpg` | `...15.51.31 (2).jpeg` | **Print do Instagram** — idem. |
-| `redario.jpg` | `...15.51.31 (3).jpeg` | **Print do Instagram** — idem. |
-| `igarape-sol.jpg` | `...15.51.32.jpeg` | **Print do Instagram** — idem. É a foto do Hero. |
-| `guarda-sois.jpg` | `...15.51.32 (2).jpeg` | **Print do Instagram** — idem. |
-| `mesas-deck.jpg` | `...15.51.32 (3).jpeg` | **Print do Instagram** — idem. |
+```bash
+# PowerShell
+$env:SUPABASE_SERVICE_ROLE_KEY="cole-a-service-role-aqui"; npm run create-admin -- dono@email.com
 
-**Antes da versão final, substituir os seis prints pelos arquivos de foto
-originais** (sem interface do Instagram, em resolução alta). Em telas grandes,
-o Hero e o CTA final ficam visivelmente pixelados com os 591 px atuais. Basta
-sobrescrever o arquivo em `assets/` com o mesmo nome.
+# Bash / macOS
+SUPABASE_SERVICE_ROLE_KEY="cole-a-service-role-aqui" npm run create-admin -- dono@email.com
+```
 
-Não usadas no site:
+O script pede a senha no terminal (não aparece na tela), cria o usuário já
+confirmado e grava `app_metadata.role = "admin"` — que é o que a RLS e o
+painel exigem. Rodar de novo com o mesmo e-mail só troca a senha. Para trocar
+de administrador depois, rode com o novo e-mail (e apague o antigo em
+*Authentication → Users*).
 
-- `...15.51.32 (1).jpeg` — print do **perfil** do Instagram (não é foto do local).
-- `...15.51.32 (4).jpeg` — marcada pelo Instagram como **"Conteúdo de IA"**.
-  Não é uma fotografia real do balneário e **não deve** ser apresentada como
-  tal (galeria, "Sobre", estrutura). Optei por não usá-la em lugar nenhum.
+Quem entrar sem essa marca vê "Sem permissão" e não consegue escrever nada,
+mesmo com sessão válida.
 
-## O que está simulado
+## 4. Rodar
 
-- Total calculado em tempo real: `quantidade × R$ 20,00`.
-- Validação simples de nome, data, quantidade e WhatsApp no navegador.
-- Ao enviar, abre `https://wa.me/<número>?text=<mensagem>` em nova aba com:
+```bash
+npm install
+npm run dev
+```
 
-  ```
-  Olá! Gostaria de reservar minha entrada no Balneário Quero Mais.
-  Nome: {nome}
-  Quantidade de pessoas: {quantidade}
-  Data desejada: {dd/mm/aaaa}
-  Valor estimado: R$ {total}.
-  Gostaria de confirmar a reserva.
-  ```
+- Site: <http://localhost:3000>
+- Painel: <http://localhost:3000/admin> (redireciona para o login)
 
-- Mapa: embed do Google Maps buscando pelo nome "Balneário Quero Mais"
-  (o local já está cadastrado no Google Maps; nenhuma coordenada foi digitada
-  à mão). O endereço textual "Km 19, Estrada de Novo Airão" não resolvia para
-  um ponto útil.
+Outros comandos: `npm run build`, `npm run start`, `npm run lint`,
+`npm run typecheck`.
 
-## Informações usadas (todas confirmadas)
+## 5. O painel (`/admin`)
 
-Nome, localização (Km 19, estrada de Novo Airão), aberto todos os dias,
-igarapé de água escura, bar e restaurante com culinária regional (peixe
-grelhado), mesas com guarda-sóis, redário dentro d'água, deck azul/branco,
-entrada R$ 20,00 por pessoa. Nada além disso foi afirmado no site.
+| Seção | Controla |
+| --- | --- |
+| **Início** | Resumo e atalhos. |
+| **Textos e imagens** | Hero (linha pequena, título, frase, foto de fundo), Sobre (título, texto, duas fotos), chamada final (frase, apoio, foto), **logo** e link do Instagram. |
+| **WhatsApp e preço** | O número que recebe as reservas (usado em todos os botões, no flutuante e na localização) e o valor da entrada por pessoa. |
+| **Estrutura** | Cards de "O que você encontra por aqui": título, descrição, foto, visível/oculto, ordem. |
+| **Galeria** | Categorias (criar, renomear, apagar, reordenar), envio de várias fotos de uma vez, legenda, mover de categoria, ordem. A categoria **Comidas** é fixa e recebe automaticamente as fotos dos pratos. |
+| **Comidas** | Pratos com foto, nome, descrição opcional, **preço opcional**, "mostrar na galeria", visível/oculto, ordem. |
+| **Localização** | Endereço, horário, observações livres e a busca que posiciona o pino no mapa. |
+
+Reordenar: arraste pela alça `⠿` (mouse ou dedo) ou use as setas `↑ ↓`. A
+ordem é salva ao soltar.
+
+Fotos: qualquer JPG/PNG/WebP/AVIF. O navegador redimensiona para no máximo
+2000 px e comprime antes de enviar, então fotos de celular de 10 MB viram
+~400 KB. Limite no Storage: 5 MB por arquivo. Há pré-visualização antes de
+salvar.
+
+Senha: link "Esqueci minha senha" no login envia e-mail com link para
+`/admin/redefinir-senha` (fluxo nativo do Supabase).
+
+## 6. Como funciona por dentro
+
+- **Conteúdo**: `site_settings` (linha única), `features`, `gallery_categories`,
+  `gallery_photos`, `food_items`. Caminhos de imagem começando com `/` apontam
+  para `public/` (acervo inicial); os demais são objetos do bucket `site`.
+- **Atualização instantânea**: a home é estática com revalidação de 5 min, e
+  cada Server Action do painel chama `revalidatePath("/")`, então a próxima
+  visita já vê a mudança.
+- **Segurança em três camadas**: `src/proxy.ts` redireciona `/admin` sem
+  sessão; toda Server Action chama `assertAdmin()`; e a RLS do banco exige
+  `is_admin()` para qualquer escrita (leitura anônima só de linhas ativas).
+  Sessão em cookie httpOnly. CSP e cabeçalhos de segurança em `proxy.ts` e
+  `next.config.ts`. Uploads validados pelos bytes (magic numbers).
+- **Imagens iniciais**: ficaram em `public/seed/`. Seis delas são recortes de
+  prints do Instagram com 591 px de largura — em telas grandes o Hero fica
+  pixelado. Basta o dono enviar as fotos originais pelo painel.
+
+## 7. Publicar
+
+Qualquer host de Next.js (Vercel é o caminho mais curto). Configure as três
+variáveis de ambiente do passo 2 com os valores de produção e aponte
+`NEXT_PUBLIC_SITE_URL` para o domínio final (ele entra no Open Graph — a foto
+do Hero é a imagem de compartilhamento no WhatsApp/Instagram).
