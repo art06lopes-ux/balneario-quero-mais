@@ -6,9 +6,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, FreeMode, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Reveal } from "@/components/site/Reveal";
 import { SectionTitle } from "@/components/site/SectionTitle";
 import type { Feature } from "@/lib/types";
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
 
 /**
  * Cards da estrutura. No mobile vira carrossel com swipe; no desktop os
@@ -18,14 +27,33 @@ export function Features({ items }: { items: Feature[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section id="atracoes" className="relative overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
-      <div className="pointer-events-none absolute -left-32 top-24 size-[460px] rounded-full [background:radial-gradient(circle,rgba(31,138,76,0.16)_0%,transparent_70%)]" aria-hidden />
-      <div className="pointer-events-none absolute -right-24 bottom-0 size-[380px] rounded-full [background:radial-gradient(circle,rgba(29,127,214,0.16)_0%,transparent_70%)]" aria-hidden />
+    <section
+      id="atracoes"
+      className="relative overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]"
+    >
+      <div
+        className="pointer-events-none absolute -left-32 top-24 size-[460px] rounded-full [background:radial-gradient(circle,rgba(31,138,76,0.16)_0%,transparent_70%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -right-24 bottom-0 size-[380px] rounded-full [background:radial-gradient(circle,rgba(29,127,214,0.16)_0%,transparent_70%)]"
+        aria-hidden
+      />
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
-        <SectionTitle index="02" eyebrow="Atrações" title="O que você encontra por aqui" className="mb-[clamp(2rem,5vw,3.5rem)]" />
+        <SectionTitle
+          index="02"
+          eyebrow="Atrações"
+          title="O que você encontra por aqui"
+          className="mb-[clamp(2rem,5vw,3.5rem)]"
+        />
       </div>
 
-      <Reveal>
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{ staggerChildren: 0.1 }}
+      >
         <Swiper
           modules={[Pagination, A11y, FreeMode]}
           slidesPerView={1.15}
@@ -40,15 +68,12 @@ export function Features({ items }: { items: Feature[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12"
         >
-          {items.map((f, i) => (
+          {items.map((f) => (
             <SwiperSlide key={f.id} className="!h-auto">
               <motion.article
-                initial={{ opacity: 0, y: 40, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+                variants={cardVariants}
                 whileTap={{ scale: 0.97 }}
                 whileHover={{ y: -8 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: Math.min(i, 3) * 0.1 }}
                 className="group relative isolate aspect-[3/4] overflow-hidden rounded-xl2 bg-forest-900 text-white shadow-card"
               >
                 {f.image && (
@@ -69,7 +94,7 @@ export function Features({ items }: { items: Feature[] }) {
             </SwiperSlide>
           ))}
         </Swiper>
-      </Reveal>
+      </motion.div>
     </section>
   );
 }

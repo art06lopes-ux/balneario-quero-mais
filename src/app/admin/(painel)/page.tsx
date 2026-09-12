@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { IconAlert, IconCheck } from "@/components/admin/icons";
 import { Card, PageHeader } from "@/components/admin/PageHeader";
+import { RefreshSiteButton } from "@/components/admin/RefreshSiteButton";
 import { getSupabaseUrl } from "@/lib/env";
 import { formatBRL } from "@/lib/format";
 import { imageUrl } from "@/lib/storage";
@@ -70,6 +71,7 @@ export default async function AdminHome() {
         title="Painel do Balneário"
         description="Tudo que você altera aqui aparece no site na hora."
         siteAnchor=""
+        action={<RefreshSiteButton />}
       />
 
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_1fr]">

@@ -9,10 +9,19 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Lightbox } from "@/components/site/Lightbox";
-import { Reveal } from "@/components/site/Reveal";
 import { SectionTitle } from "@/components/site/SectionTitle";
 import { formatBRL } from "@/lib/format";
 import type { FoodItem } from "@/lib/types";
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
 
 /** Seção de comidas: carrossel com swipe, setas no desktop, toque para ampliar. */
 export function Foods({ items }: { items: FoodItem[] }) {
@@ -22,24 +31,54 @@ export function Foods({ items }: { items: FoodItem[] }) {
   if (items.length === 0) return null;
 
   const withPhoto = items.filter((f) => f.image);
-  const photos = withPhoto.map((f) => ({ id: f.id, src: f.image ?? "", alt: f.name, categorySlug: "comidas" }));
+  const photos = withPhoto.map((f) => ({
+    id: f.id,
+    src: f.image ?? "",
+    alt: f.name,
+    categorySlug: "comidas",
+  }));
 
   return (
     <section
       id="comidas"
       className="relative overflow-hidden bg-forest-900 py-[clamp(4rem,9vw,7.5rem)] text-white [--swiper-navigation-color:#082f22]"
     >
-      <svg className="absolute inset-x-0 top-0 h-[40px] w-full text-sand sm:h-[70px]" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden>
-        <path fill="currentColor" d="M0,0 L1440,0 L1440,25 C1200,70 960,70 720,35 C480,0 240,0 0,35 Z" />
+      <svg
+        className="absolute inset-x-0 top-0 h-[40px] w-full text-sand sm:h-[70px]"
+        viewBox="0 0 1440 70"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          fill="currentColor"
+          d="M0,0 L1440,0 L1440,25 C1200,70 960,70 720,35 C480,0 240,0 0,35 Z"
+        />
       </svg>
-      <div className="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(247,181,0,0.24)_0%,transparent_70%)]" aria-hidden />
-      <div className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(29,127,214,0.32)_0%,transparent_70%)]" aria-hidden />
+      <div
+        className="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(247,181,0,0.24)_0%,transparent_70%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(29,127,214,0.32)_0%,transparent_70%)]"
+        aria-hidden
+      />
 
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
-        <SectionTitle index="04" eyebrow="Comidas" title="Sabor regional à beira do igarapé" tone="dark" className="mb-[clamp(2rem,5vw,3.5rem)]" />
+        <SectionTitle
+          index="04"
+          eyebrow="Comidas"
+          title="Sabor regional à beira do igarapé"
+          tone="dark"
+          className="mb-[clamp(2rem,5vw,3.5rem)]"
+        />
       </div>
 
-      <Reveal>
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{ staggerChildren: 0.1 }}
+      >
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           slidesPerView={1.15}
@@ -54,17 +93,14 @@ export function Foods({ items }: { items: FoodItem[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12 max-md:[&_.swiper-button-next]:!hidden max-md:[&_.swiper-button-prev]:!hidden [&_.swiper-button-next]:!-right-2 [&_.swiper-button-next]:!top-[38%] [&_.swiper-button-next]:!size-12 [&_.swiper-button-next]:!rounded-full [&_.swiper-button-next]:!bg-sun-500 [&_.swiper-button-next]:!shadow-sun [&_.swiper-button-next]:after:!text-base [&_.swiper-button-next]:after:!font-black [&_.swiper-button-prev]:!-left-2 [&_.swiper-button-prev]:!top-[38%] [&_.swiper-button-prev]:!size-12 [&_.swiper-button-prev]:!rounded-full [&_.swiper-button-prev]:!bg-sun-500 [&_.swiper-button-prev]:!shadow-sun [&_.swiper-button-prev]:after:!text-base [&_.swiper-button-prev]:after:!font-black"
         >
-          {items.map((f, i) => {
+          {items.map((f) => {
             const photoIndex = withPhoto.findIndex((w) => w.id === f.id);
             return (
               <SwiperSlide key={f.id} className="!h-auto">
                 <motion.article
-                  initial={{ opacity: 0, y: 40, scale: 0.96 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+                  variants={cardVariants}
                   whileTap={{ scale: 0.97 }}
                   whileHover={{ y: -8 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: Math.min(i, 3) * 0.1 }}
                   className="flex h-full flex-col overflow-hidden rounded-xl2 bg-white text-ink shadow-deep"
                 >
                   <button
@@ -92,15 +128,19 @@ export function Foods({ items }: { items: FoodItem[] }) {
                     )}
                   </button>
                   <div className="flex flex-1 flex-col p-5">
-                    <h3 className="mb-1 font-display text-xl font-bold text-forest-800">{f.name}</h3>
-                    {f.description && <p className="text-[0.92rem] leading-relaxed text-ink-2">{f.description}</p>}
+                    <h3 className="mb-1 font-display text-xl font-bold text-forest-800">
+                      {f.name}
+                    </h3>
+                    {f.description && (
+                      <p className="text-[0.92rem] leading-relaxed text-ink-2">{f.description}</p>
+                    )}
                   </div>
                 </motion.article>
               </SwiperSlide>
             );
           })}
         </Swiper>
-      </Reveal>
+      </motion.div>
 
       <Lightbox photos={photos} index={open} onClose={close} />
     </section>
