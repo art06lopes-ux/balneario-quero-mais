@@ -64,11 +64,18 @@ export default async function HomePage() {
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 
   // Só entram no menu as seções que realmente existem com o conteúdo atual.
-  const nav: NavItem[] = [["#inicio", "Início"], ["#sobre", "Sobre"]];
+  const nav: NavItem[] = [
+    ["#inicio", "Início"],
+    ["#sobre", "Sobre"],
+  ];
   if (features.length > 0) nav.push(["#atracoes", "Atrações"]);
   if (gallery.length > 0) nav.push(["#galeria", "Galeria"]);
   if (foods.length > 0) nav.push(["#comidas", "Comidas"]);
@@ -88,36 +95,49 @@ export default async function HomePage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+      />
       <SmoothScroll>
-      <ScrollProgress />
-      <Header logo={settings.logo} nav={nav} />
-      <main id="conteudo">
-        <Hero s={settings} />
-        <Marquee
-          items={["Igarapé de água escura", "Redário dentro d\u2019água", "Bar & restaurante", "Aberto todos os dias", "Km 19 · Estrada de Novo Airão", "Peixe grelhado"]}
-          className="border-y border-forest-900/10 bg-sand-2 py-3 text-forest-800"
-        />
-        <About s={settings} />
-        <Features items={features} />
-        <Gallery categories={gallery} />
-        <Foods items={foods} />
-        <Booking
-          whatsappNumber={settings.whatsappNumber}
-          ticketPrice={settings.ticketPrice}
-          chargeMode={settings.chargeMode}
-          extraHolidays={settings.extraHolidays}
-          pricingNote={settings.pricingNote}
-          settings={settings}
-        />
-        <FAQ items={faq} />
-        <FinalCTA s={settings} />
-        <Location s={settings} />
-      </main>
-      <Footer s={settings} nav={nav} />
-      <FloatingWhatsApp number={settings.whatsappNumber} />
-      <MobileCTA price={settings.ticketPrice} chargeMode={settings.chargeMode} />
+        <ScrollProgress />
+        <Header logo={settings.logo} nav={nav} />
+        <main id="conteudo">
+          <Hero s={settings} />
+          <Marquee
+            items={[
+              "Igarapé de água escura",
+              "Redário dentro d\u2019água",
+              "Bar & restaurante",
+              "Aberto todos os dias",
+              "Km 19 · Estrada de Novo Airão",
+              "Peixe grelhado",
+            ]}
+            className="border-y border-forest-900/10 bg-sand-2 py-3 text-forest-800"
+          />
+          <About s={settings} />
+          <Features items={features} />
+          <Gallery categories={gallery} />
+          <Foods items={foods} />
+          <Booking
+            whatsappNumber={settings.whatsappNumber}
+            ticketPrice={settings.ticketPrice}
+            chargeMode={settings.chargeMode}
+            extraHolidays={settings.extraHolidays}
+            pricingNote={settings.pricingNote}
+            settings={settings}
+          />
+          <FAQ items={faq} />
+          <FinalCTA s={settings} />
+          <Location s={settings} />
+        </main>
+        <Footer s={settings} nav={nav} />
+        <FloatingWhatsApp number={settings.whatsappNumber} />
+        <MobileCTA price={settings.ticketPrice} chargeMode={settings.chargeMode} />
       </SmoothScroll>
     </>
   );

@@ -32,6 +32,7 @@ export type SiteSettings = {
   petsAllowed: boolean;
   outsideFoodAllowed: boolean;
   houseRules: string;
+  liveMusic: string;
 };
 
 export type Feature = {

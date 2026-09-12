@@ -28,7 +28,9 @@ export function buildFaq(s: SiteSettings): FaqItem[] {
     },
     {
       q: "Posso levar meu pet?",
-      a: s.petsAllowed ? "Sim! Pets são bem-vindos no balneário." : "Não, a entrada de animais não é permitida.",
+      a: s.petsAllowed
+        ? "Sim! Pets são bem-vindos no balneário."
+        : "Não, a entrada de animais não é permitida.",
     },
     {
       q: "Posso levar comida e bebida?",
@@ -39,4 +41,3 @@ export function buildFaq(s: SiteSettings): FaqItem[] {
     { q: "Onde fica?", a: `${s.address}. O mapa na seção Localização abre a rota no Google Maps.` },
   ];
 }
-

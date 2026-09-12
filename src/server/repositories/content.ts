@@ -38,6 +38,7 @@ export type SettingsRow = {
   pets_allowed?: boolean;
   outside_food_allowed?: boolean;
   house_rules?: string;
+  live_music?: string;
   updated_at?: string;
 };
 
@@ -111,6 +112,7 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
     petsAllowed: row.pets_allowed ?? true,
     outsideFoodAllowed: row.outside_food_allowed ?? false,
     houseRules: row.house_rules ?? "",
+    liveMusic: row.live_music ?? "Som ao vivo aos domingos e feriados",
   };
 }
 

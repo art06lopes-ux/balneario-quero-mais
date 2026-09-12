@@ -340,6 +340,18 @@ export function LocationForm({ row }: { row: SettingsRow }) {
               defaultChecked={row.outside_food_allowed ?? false}
             />
             <Field
+              label="Programação em destaque"
+              htmlFor="live_music"
+              hint="Aparece no topo do site, na faixa rolante e na reserva. Vazio = não aparece."
+            >
+              <Input
+                id="live_music"
+                name="live_music"
+                defaultValue={row.live_music ?? "Som ao vivo aos domingos e feriados"}
+                maxLength={120}
+              />
+            </Field>
+            <Field
               label="Outras regras (opcional)"
               htmlFor="house_rules"
               hint="Uma por linha. Comece com &ldquo;Não&rdquo; ou &ldquo;Proibido&rdquo; para aparecer como proibição."

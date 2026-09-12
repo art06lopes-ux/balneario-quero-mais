@@ -150,6 +150,7 @@ const locationSchema = z.object({
   pets_allowed: z.boolean(),
   outside_food_allowed: z.boolean(),
   house_rules: z.string().max(1000),
+  live_music: z.string().max(120),
 });
 
 export async function updateLocation(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -163,6 +164,7 @@ export async function updateLocation(_prev: FormState, formData: FormData): Prom
       pets_allowed: bool(formData, "pets_allowed"),
       outside_food_allowed: bool(formData, "outside_food_allowed"),
       house_rules: str(formData, "house_rules"),
+      live_music: str(formData, "live_music"),
     });
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Dados inválidos.", success: null };
 

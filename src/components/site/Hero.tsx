@@ -41,7 +41,10 @@ export function Hero({ s }: { s: SiteSettings }) {
       className="relative isolate flex min-h-svh items-center overflow-hidden pt-[calc(76px+3rem)] pb-28 text-white"
     >
       {/* Foto com parallax + tratamento verde-floresta */}
-      <motion.div style={{ y: bgY }} className="absolute inset-[-12%_0_0_0] -z-20 will-change-transform">
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute inset-[-12%_0_0_0] -z-20 will-change-transform"
+      >
         {s.heroImage && (
           <Image
             src={s.heroImage}
@@ -123,8 +126,12 @@ export function Hero({ s }: { s: SiteSettings }) {
             transition={{ duration: 0.8, ease: EASE, delay: 0.85 }}
             className="mb-7 inline-flex flex-wrap items-baseline gap-x-2.5 gap-y-1 rounded-2xl border border-white/30 bg-white/10 px-5 py-3 shadow-[0_10px_40px_rgba(0,0,0,.25)] backdrop-blur-md"
           >
-            <span className="font-display text-xs font-semibold tracking-[0.12em] text-sun-500 uppercase">Entrada</span>
-            <span className="font-display text-[clamp(1.7rem,3.5vw,2.3rem)] leading-none font-extrabold">{formatBRL(s.ticketPrice)}</span>
+            <span className="font-display text-xs font-semibold tracking-[0.12em] text-sun-500 uppercase">
+              Entrada
+            </span>
+            <span className="font-display text-[clamp(1.7rem,3.5vw,2.3rem)] leading-none font-extrabold">
+              {formatBRL(s.ticketPrice)}
+            </span>
             <span className="text-[0.95rem] text-white/85">{priceUnitLabel(s.chargeMode)}</span>
             {note && <span className="basis-full text-[0.82rem] text-white/75">{note}</span>}
           </motion.div>
@@ -155,6 +162,7 @@ export function Hero({ s }: { s: SiteSettings }) {
           >
             {[
               "Aberto todos os dias",
+              ...(s.liveMusic ? [s.liveMusic] : []),
               "Bar & restaurante",
               ...(s.petsAllowed ? ["Aceita pets"] : []),
               ...(s.outsideFoodAllowed ? [] : ["Sem comida e bebida de fora"]),
@@ -193,8 +201,16 @@ export function Hero({ s }: { s: SiteSettings }) {
       </a>
 
       {/* Section Transition: onda orgânica para a próxima seção */}
-      <svg className="absolute inset-x-0 bottom-0 z-10 h-[60px] w-full text-sand sm:h-[90px]" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden>
-        <path fill="currentColor" d="M0,50 C240,95 480,95 720,55 C960,15 1200,15 1440,55 L1440,90 L0,90 Z" />
+      <svg
+        className="absolute inset-x-0 bottom-0 z-10 h-[60px] w-full text-sand sm:h-[90px]"
+        viewBox="0 0 1440 90"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          fill="currentColor"
+          d="M0,50 C240,95 480,95 720,55 C960,15 1200,15 1440,55 L1440,90 L0,90 Z"
+        />
       </svg>
     </section>
   );
