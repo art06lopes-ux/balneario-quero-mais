@@ -35,6 +35,9 @@ export type SettingsRow = {
   google_rating_count: number | null;
   google_reviews_url: string;
   instagram_followers: string;
+  pets_allowed?: boolean;
+  outside_food_allowed?: boolean;
+  house_rules?: string;
   updated_at?: string;
 };
 
@@ -105,6 +108,9 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
     googleRatingCount: row.google_rating_count ?? null,
     googleReviewsUrl: row.google_reviews_url ?? "",
     instagramFollowers: row.instagram_followers ?? "",
+    petsAllowed: row.pets_allowed ?? true,
+    outsideFoodAllowed: row.outside_food_allowed ?? false,
+    houseRules: row.house_rules ?? "",
   };
 }
 

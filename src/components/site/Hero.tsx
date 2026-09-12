@@ -153,7 +153,12 @@ export function Hero({ s }: { s: SiteSettings }) {
             animate="show"
             transition={{ staggerChildren: 0.1, delayChildren: 1.15 }}
           >
-            {["Aberto todos os dias", "Bar & restaurante", "Água natural de igarapé"].map((f) => (
+            {[
+              "Aberto todos os dias",
+              "Bar & restaurante",
+              ...(s.petsAllowed ? ["Aceita pets"] : []),
+              ...(s.outsideFoodAllowed ? [] : ["Sem comida e bebida de fora"]),
+            ].map((f) => (
               <motion.li
                 key={f}
                 variants={{ hidden: { opacity: 0, x: -10 }, show: { opacity: 1, x: 0 } }}

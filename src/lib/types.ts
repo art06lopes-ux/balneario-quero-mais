@@ -29,6 +29,9 @@ export type SiteSettings = {
   googleRatingCount: number | null;
   googleReviewsUrl: string;
   instagramFollowers: string;
+  petsAllowed: boolean;
+  outsideFoodAllowed: boolean;
+  houseRules: string;
 };
 
 export type Feature = {

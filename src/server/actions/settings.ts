@@ -4,7 +4,7 @@ import { z } from "zod";
 import { assertAdmin } from "@/server/auth";
 import { createAuthenticatedClient } from "@/server/supabase/server";
 import { fileFrom, removeStoredFile, uploadImage, type UploadFolder } from "@/server/upload";
-import { fail, revalidateSite, str, type FormState } from "@/server/actions/shared";
+import { bool, fail, revalidateSite, str, type FormState } from "@/server/actions/shared";
 
 type ImageField = {
   field: string; // nome do input file
@@ -147,6 +147,9 @@ const locationSchema = z.object({
   hours: z.string().max(200),
   location_notes: z.string().max(1000),
   maps_query: z.string().max(200),
+  pets_allowed: z.boolean(),
+  outside_food_allowed: z.boolean(),
+  house_rules: z.string().max(1000),
 });
 
 export async function updateLocation(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -157,6 +160,9 @@ export async function updateLocation(_prev: FormState, formData: FormData): Prom
       hours: str(formData, "hours"),
       location_notes: str(formData, "location_notes"),
       maps_query: str(formData, "maps_query"),
+      pets_allowed: bool(formData, "pets_allowed"),
+      outside_food_allowed: bool(formData, "outside_food_allowed"),
+      house_rules: str(formData, "house_rules"),
     });
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Dados inválidos.", success: null };
 

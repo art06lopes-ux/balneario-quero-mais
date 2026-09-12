@@ -109,6 +109,7 @@ export default async function HomePage() {
           chargeMode={settings.chargeMode}
           extraHolidays={settings.extraHolidays}
           pricingNote={settings.pricingNote}
+          settings={settings}
         />
         <FAQ items={faq} />
         <FinalCTA s={settings} />

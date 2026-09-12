@@ -335,3 +335,17 @@ update public.site_settings
        google_reviews_url = case when google_reviews_url = '' then 'https://www.google.com/maps/search/Balne%C3%A1rio+Quero+Mais+Novo+Air%C3%A3o+Amazonas' else google_reviews_url end,
        instagram_followers = case when instagram_followers = '' then '7,9 mil' else instagram_followers end
  where id = 1;
+
+-- >>> supabase/migrations/0006_regras_da_casa.sql
+-- =====================================================================
+-- 0006 — Regras da casa (editáveis no painel)
+--
+-- Informadas pelo dono em 12/09/2026: aceita pets; proibida a entrada
+-- com comidas e bebidas de fora.
+-- =====================================================================
+
+alter table public.site_settings
+  add column if not exists pets_allowed         boolean not null default true,
+  add column if not exists outside_food_allowed boolean not null default false,
+  -- Observações extras, uma por linha (opcional).
+  add column if not exists house_rules          text not null default '';

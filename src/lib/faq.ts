@@ -26,6 +26,16 @@ export function buildFaq(s: SiteSettings): FaqItem[] {
       q: "Tem comida no local?",
       a: "Sim. O bar e restaurante serve culinária regional, com o peixe grelhado como prato da casa. Veja os pratos na seção Comidas.",
     },
+    {
+      q: "Posso levar meu pet?",
+      a: s.petsAllowed ? "Sim! Pets são bem-vindos no balneário." : "Não, a entrada de animais não é permitida.",
+    },
+    {
+      q: "Posso levar comida e bebida?",
+      a: s.outsideFoodAllowed
+        ? "Sim, pode trazer."
+        : "Não. É proibida a entrada com comidas e bebidas de fora — o bar e restaurante do balneário atende você no local.",
+    },
     { q: "Onde fica?", a: `${s.address}. O mapa na seção Localização abre a rota no Google Maps.` },
   ];
 }

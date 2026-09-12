@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { ImageField } from "@/components/admin/ImageField";
 import { Card } from "@/components/admin/PageHeader";
 import { Button } from "@/components/ui/Button";
-import { Field, Input, Textarea } from "@/components/ui/Field";
+import { Checkbox, Field, Input, Textarea } from "@/components/ui/Field";
 import { Toast } from "@/components/ui/Toast";
 import { UnsavedGuard } from "@/components/admin/UnsavedGuard";
 import { formatWhatsappNumber } from "@/lib/whatsapp";
@@ -323,6 +323,38 @@ export function LocationForm({ row }: { row: SettingsRow }) {
             </Field>
           </div>
         </Card>
+        <Card title="Regras da casa">
+          <p className="mb-4 text-sm text-ink-3">
+            Aparecem no topo do site, no bloco &ldquo;Bom saber&rdquo; da reserva e nas perguntas
+            frequentes.
+          </p>
+          <div className="grid gap-3">
+            <Checkbox
+              name="pets_allowed"
+              label="Aceita pets"
+              defaultChecked={row.pets_allowed ?? true}
+            />
+            <Checkbox
+              name="outside_food_allowed"
+              label="Permite entrar com comidas e bebidas de fora"
+              defaultChecked={row.outside_food_allowed ?? false}
+            />
+            <Field
+              label="Outras regras (opcional)"
+              htmlFor="house_rules"
+              hint="Uma por linha. Comece com &ldquo;Não&rdquo; ou &ldquo;Proibido&rdquo; para aparecer como proibição."
+            >
+              <Textarea
+                id="house_rules"
+                name="house_rules"
+                defaultValue={row.house_rules ?? ""}
+                maxLength={1000}
+                className="min-h-[80px]"
+              />
+            </Field>
+          </div>
+        </Card>
+
         <Card title="Mapa">
           <Field
             label="Busca do Google Maps"
