@@ -7,6 +7,7 @@ import { A11y, FreeMode, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Reveal } from "@/components/site/Reveal";
+import { SectionTitle } from "@/components/site/SectionTitle";
 import type { Feature } from "@/lib/types";
 
 /**
@@ -19,14 +20,7 @@ export function Features({ items }: { items: Feature[] }) {
   return (
     <section id="atracoes" className="overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
-        <div className="mb-[clamp(2rem,5vw,3.5rem)] max-w-[640px]">
-          <Reveal>
-            <span className="eyebrow text-forest-500">Atrações</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold text-forest-800">O que você encontra por aqui</h2>
-          </Reveal>
-        </div>
+        <SectionTitle index="02" eyebrow="Atrações" title="O que você encontra por aqui" className="mb-[clamp(2rem,5vw,3.5rem)]" />
       </div>
 
       <Reveal>
@@ -44,12 +38,15 @@ export function Features({ items }: { items: Feature[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12"
         >
-          {items.map((f) => (
+          {items.map((f, i) => (
             <SwiperSlide key={f.id} className="!h-auto">
               <motion.article
+                initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "0px 0px -40px 0px" }}
                 whileTap={{ scale: 0.97 }}
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: Math.min(i, 3) * 0.1 }}
                 className="group relative isolate aspect-[3/4] overflow-hidden rounded-xl2 bg-forest-900 text-white shadow-card"
               >
                 {f.image && (

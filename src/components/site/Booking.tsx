@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { Reveal } from "@/components/site/Reveal";
+import { SectionTitle } from "@/components/site/SectionTitle";
 import { formatBRL, isoToBR, maskPhone, todayISO } from "@/lib/format";
 import { defaultPricingNote, isChargedDate, priceUnitLabel, type ChargeMode } from "@/lib/pricing";
 import { BUSINESS_NAME } from "@/lib/types";
@@ -76,16 +77,7 @@ export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays
     >
       <div className="mx-auto grid w-[min(1180px,100%-2.5rem)] items-center gap-[clamp(2.5rem,6vw,5rem)] md:grid-cols-2">
         <div>
-          <Reveal>
-            <span className="eyebrow text-sun-500">Reserva</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mb-5 font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold">
-              Garanta sua entrada
-              <br />
-              pelo WhatsApp
-            </h2>
-          </Reveal>
+          <SectionTitle index="05" eyebrow="Reserva" title="Garanta sua entrada pelo WhatsApp" tone="dark" className="mb-5" />
           <Reveal delay={0.1}>
             <p className="max-w-[460px] text-[1.05rem] leading-relaxed text-white/80">
               Escolha a quantidade de pessoas e a data, informe seu nome e WhatsApp. A gente monta a mensagem pra você e abre direto na conversa com o balneário.
@@ -165,7 +157,7 @@ export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays
                 <p role="alert" className="text-sm font-medium text-[#b93232]">{error}</p>
               )}
 
-              <motion.button whileTap={{ scale: 0.98 }} type="submit" className="btn btn-wa btn-lg w-full">
+              <motion.button whileTap={{ scale: 0.98 }} type="submit" className="btn btn-wa btn-lg btn-shine w-full">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[22px]"><path fill="currentColor" d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2m0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 15 3.7 13.5 3.7 12c0-4.6 3.7-8.3 8.3-8.3s8.3 3.7 8.3 8.3-3.7 8.2-8.3 8.2"/></svg>
                 Reservar pelo WhatsApp
               </motion.button>

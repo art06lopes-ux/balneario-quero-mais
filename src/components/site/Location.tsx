@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/site/Reveal";
+import { SectionTitle } from "@/components/site/SectionTitle";
 import type { SiteSettings } from "@/lib/types";
 import { formatWhatsappNumber, whatsappLink } from "@/lib/whatsapp";
 
@@ -15,12 +16,7 @@ export function Location({ s }: { s: SiteSettings }) {
     <section id="localizacao" className="py-[clamp(4rem,9vw,7.5rem)]">
       <div className="mx-auto grid w-[min(1180px,100%-2.5rem)] items-start gap-[clamp(2rem,5vw,4rem)] md:grid-cols-[1fr_1.3fr]">
         <div>
-          <Reveal>
-            <span className="eyebrow text-forest-500">Localização</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mb-4 font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold text-forest-800">Como chegar</h2>
-          </Reveal>
+          <SectionTitle index="06" eyebrow="Localização" title="Como chegar" className="mb-4" />
 
           <Reveal delay={0.1}>
             <Info

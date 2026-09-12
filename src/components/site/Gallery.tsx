@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Lightbox } from "@/components/site/Lightbox";
 import { Reveal } from "@/components/site/Reveal";
+import { SectionTitle } from "@/components/site/SectionTitle";
 import type { GalleryCategory, GalleryPhoto } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -41,14 +42,7 @@ export function Gallery({ categories }: { categories: GalleryCategory[] }) {
     <section id="galeria" className="overflow-hidden py-[clamp(4rem,9vw,7.5rem)]">
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-[640px]">
-            <Reveal>
-              <span className="eyebrow text-forest-500">Galeria</span>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold text-forest-800">Fotos do balneário</h2>
-            </Reveal>
-          </div>
+          <SectionTitle index="03" eyebrow="Galeria" title="Fotos do balneário" />
         </div>
 
         {/* Abas de categoria */}
@@ -88,14 +82,20 @@ export function Gallery({ categories }: { categories: GalleryCategory[] }) {
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
+              initial="hidden"
+              animate="show"
+              exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
+              transition={{ staggerChildren: 0.05 }}
               className="grid auto-rows-[230px] grid-flow-dense grid-cols-4 gap-3.5"
             >
               {photos.map((p, i) => (
-                <Tile key={p.id} photo={p} className={bentoClass(i)} onOpen={() => setLightbox(i)} />
+                <motion.div
+                  key={p.id}
+                  variants={{ hidden: { opacity: 0, y: 24, scale: 0.96 }, show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
+                  className={cn("relative", bentoClass(i))}
+                >
+                  <Tile photo={p} className="h-full" onOpen={() => setLightbox(i)} />
+                </motion.div>
               ))}
             </motion.div>
           </AnimatePresence>

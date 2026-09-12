@@ -10,6 +10,8 @@ import { Gallery } from "@/components/site/Gallery";
 import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 import { Location } from "@/components/site/Location";
+import { Marquee, ScrollProgress } from "@/components/site/motion";
+import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { getSiteUrl } from "@/lib/env";
 import { formatBRL } from "@/lib/format";
 import { priceUnitLabel } from "@/lib/pricing";
@@ -70,9 +72,15 @@ export default async function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <SmoothScroll>
+      <ScrollProgress />
       <Header logo={settings.logo} />
       <main>
         <Hero s={settings} />
+        <Marquee
+          items={["Igarapé de água escura", "Redário dentro d\u2019água", "Bar & restaurante", "Aberto todos os dias", "Km 19 · Estrada de Novo Airão", "Peixe grelhado"]}
+          className="border-y border-forest-900/10 bg-sand-2 py-3 text-forest-800"
+        />
         <About s={settings} />
         <Features items={features} />
         <Gallery categories={gallery} />
@@ -89,6 +97,7 @@ export default async function HomePage() {
       </main>
       <Footer s={settings} />
       <FloatingWhatsApp number={settings.whatsappNumber} />
+      </SmoothScroll>
     </>
   );
 }

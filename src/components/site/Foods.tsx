@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Lightbox } from "@/components/site/Lightbox";
 import { Reveal } from "@/components/site/Reveal";
+import { SectionTitle } from "@/components/site/SectionTitle";
 import { formatBRL } from "@/lib/format";
 import type { FoodItem } from "@/lib/types";
 
@@ -32,14 +33,7 @@ export function Foods({ items }: { items: FoodItem[] }) {
       <div className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full bg-river-500/20 blur-3xl" aria-hidden />
 
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
-        <div className="mb-[clamp(2rem,5vw,3.5rem)] max-w-[640px]">
-          <Reveal>
-            <span className="eyebrow text-sun-500">Comidas</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold">Sabor regional à beira do igarapé</h2>
-          </Reveal>
-        </div>
+        <SectionTitle index="04" eyebrow="Comidas" title="Sabor regional à beira do igarapé" tone="dark" className="mb-[clamp(2rem,5vw,3.5rem)]" />
       </div>
 
       <Reveal>
@@ -57,14 +51,17 @@ export function Foods({ items }: { items: FoodItem[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12 max-md:[&_.swiper-button-next]:!hidden max-md:[&_.swiper-button-prev]:!hidden [&_.swiper-button-next]:!-right-2 [&_.swiper-button-next]:!top-[38%] [&_.swiper-button-next]:!size-12 [&_.swiper-button-next]:!rounded-full [&_.swiper-button-next]:!bg-sun-500 [&_.swiper-button-next]:!shadow-sun [&_.swiper-button-next]:after:!text-base [&_.swiper-button-next]:after:!font-black [&_.swiper-button-prev]:!-left-2 [&_.swiper-button-prev]:!top-[38%] [&_.swiper-button-prev]:!size-12 [&_.swiper-button-prev]:!rounded-full [&_.swiper-button-prev]:!bg-sun-500 [&_.swiper-button-prev]:!shadow-sun [&_.swiper-button-prev]:after:!text-base [&_.swiper-button-prev]:after:!font-black"
         >
-          {items.map((f) => {
+          {items.map((f, i) => {
             const photoIndex = withPhoto.findIndex((w) => w.id === f.id);
             return (
               <SwiperSlide key={f.id} className="!h-auto">
                 <motion.article
+                  initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "0px 0px -40px 0px" }}
                   whileTap={{ scale: 0.97 }}
-                  whileHover={{ y: -6 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: Math.min(i, 3) * 0.1 }}
                   className="flex h-full flex-col overflow-hidden rounded-xl2 bg-white text-ink shadow-deep"
                 >
                   <button
