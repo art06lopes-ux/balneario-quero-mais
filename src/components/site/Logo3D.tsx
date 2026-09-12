@@ -1,7 +1,14 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
-import { useCallback, useRef, type PointerEvent } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { useCallback, useEffect, useRef, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -15,6 +22,8 @@ type Props = {
   float?: boolean;
   className?: string;
   priority?: boolean;
+  /** No celular, inclina conforme o aparelho se move (giroscópio). */
+  gyro?: boolean;
 };
 
 /**
@@ -24,7 +33,16 @@ type Props = {
  * um brilho especular acompanha o ponteiro e camadas de sombra dão
  * profundidade. Sem WebGL: é só transform 3D em CSS, leve para o mobile.
  */
-export function Logo3D({ src, alt = "Balneário Quero Mais", size = 64, tilt = 18, float = false, className, priority }: Props) {
+export function Logo3D({
+  src,
+  alt = "Balneário Quero Mais",
+  size = 64,
+  tilt = 18,
+  float = false,
+  className,
+  priority,
+  gyro = false,
+}: Props) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,6 +73,22 @@ export function Logo3D({ src, alt = "Balneário Quero Mais", size = 64, tilt = 1
     py.set(0);
   }, [px, py]);
 
+  // Giroscópio: só em aparelhos de toque (Android libera sem permissão; no
+  // iPhone exige um gesto de permissão, então lá fica só o toque).
+  useEffect(() => {
+    if (!gyro || reduce) return;
+    if (!window.matchMedia("(hover: none)").matches) return;
+    if (typeof DeviceOrientationEvent === "undefined") return;
+    const onOrient = (e: DeviceOrientationEvent) => {
+      if (e.gamma === null || e.beta === null) return;
+      // gamma: inclinação esquerda/direita (-90..90); beta: frente/trás (-180..180)
+      px.set(Math.max(-0.5, Math.min(0.5, e.gamma / 60)));
+      py.set(Math.max(-0.5, Math.min(0.5, (e.beta - 45) / 60)));
+    };
+    window.addEventListener("deviceorientation", onOrient);
+    return () => window.removeEventListener("deviceorientation", onOrient);
+  }, [gyro, reduce, px, py]);
+
   return (
     <motion.div
       ref={ref}
@@ -73,7 +107,10 @@ export function Logo3D({ src, alt = "Balneário Quero Mais", size = 64, tilt = 1
         {/* sombra profunda, deslocada para trás (box-shadow: barata, sem filter) */}
         <div
           className="absolute inset-[6%] rounded-full"
-          style={{ transform: "translateZ(-40px) translateY(14%)", boxShadow: "0 24px 48px 8px rgba(4,24,15,.45)" }}
+          style={{
+            transform: "translateZ(-40px) translateY(14%)",
+            boxShadow: "0 24px 48px 8px rgba(4,24,15,.45)",
+          }}
           aria-hidden
         />
         {/* aro de luz */}

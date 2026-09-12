@@ -38,7 +38,7 @@ export function Hero({ s }: { s: SiteSettings }) {
     <section
       ref={ref}
       id="inicio"
-      className="relative isolate flex min-h-svh items-center overflow-hidden pt-[calc(76px+3rem)] pb-28 text-white"
+      className="relative isolate flex min-h-svh items-center overflow-hidden pt-[calc(76px+2rem)] pb-28 text-white"
     >
       {/* Foto com parallax + tratamento verde-floresta */}
       <motion.div
@@ -89,6 +89,16 @@ export function Hero({ s }: { s: SiteSettings }) {
         className="mx-auto grid w-[min(1180px,100%-2.5rem)] items-center gap-10 lg:grid-cols-[1.25fr_0.75fr]"
       >
         <div className="max-w-[720px]">
+          {s.logo && (
+            <motion.div
+              className="mb-5 lg:hidden"
+              initial={reduce ? undefined : { opacity: 0, scale: 0.7, rotate: -8 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.05 }}
+            >
+              <Logo3D src={s.logo} size={108} tilt={20} float gyro priority />
+            </motion.div>
+          )}
           {s.heroKicker && (
             <motion.span
               className="eyebrow text-sun-500"
@@ -187,7 +197,7 @@ export function Hero({ s }: { s: SiteSettings }) {
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
           >
-            <Logo3D src={s.logo} size={300} tilt={22} float priority />
+            <Logo3D src={s.logo} size={300} tilt={22} float gyro priority />
           </motion.div>
         )}
       </motion.div>
