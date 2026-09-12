@@ -10,6 +10,9 @@ import { getPublicSupabaseClient } from "@/server/supabase/client";
 export type SettingsRow = {
   whatsapp_number: string;
   ticket_price: number | string;
+  charge_mode: "always" | "sundays_holidays";
+  extra_holidays: string;
+  pricing_note: string;
   hero_kicker: string;
   hero_title: string;
   hero_subtitle: string;
@@ -72,6 +75,9 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
   return {
     whatsappNumber: row.whatsapp_number,
     ticketPrice: num(row.ticket_price) ?? 0,
+    chargeMode: row.charge_mode ?? "always",
+    extraHolidays: row.extra_holidays ?? "",
+    pricingNote: row.pricing_note ?? "",
     heroKicker: row.hero_kicker,
     heroTitle: row.hero_title,
     heroSubtitle: row.hero_subtitle,

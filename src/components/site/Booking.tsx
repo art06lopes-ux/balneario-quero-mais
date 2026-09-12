@@ -4,17 +4,24 @@ import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { Reveal } from "@/components/site/Reveal";
 import { formatBRL, isoToBR, maskPhone, todayISO } from "@/lib/format";
+import { defaultPricingNote, isChargedDate, priceUnitLabel, type ChargeMode } from "@/lib/pricing";
 import { BUSINESS_NAME } from "@/lib/types";
 import { buildBookingMessage, whatsappLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
-type Props = { whatsappNumber: string; ticketPrice: number };
+type Props = {
+  whatsappNumber: string;
+  ticketPrice: number;
+  chargeMode: ChargeMode;
+  extraHolidays: string;
+  pricingNote: string;
+};
 
 /**
  * Reserva via WhatsApp. O número e o preço vêm do painel; o cálculo e a
  * mensagem continuam iguais aos aprovados na prévia.
  */
-export function Booking({ whatsappNumber, ticketPrice }: Props) {
+export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays, pricingNote }: Props) {
   const [qty, setQty] = useState(1);
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -22,7 +29,11 @@ export function Booking({ whatsappNumber, ticketPrice }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
 
-  const total = qty * ticketPrice;
+  // Cobra só se a data escolhida for de cobrança (domingo/feriado, conforme o painel).
+  const charged = isChargedDate(date, chargeMode, extraHolidays);
+  const total = charged ? qty * ticketPrice : 0;
+  const freeDay = chargeMode === "sundays_holidays" && date !== "" && !charged;
+  const note = pricingNote || defaultPricingNote(chargeMode);
   const phoneDigits = phone.replace(/\D/g, "");
   const invalid = {
     name: touched && name.trim() === "",
@@ -46,7 +57,7 @@ export function Booking({ whatsappNumber, ticketPrice }: Props) {
       name: name.trim(),
       quantity: qty,
       date: isoToBR(date),
-      total: formatBRL(total),
+      total: freeDay ? "entrada gratuita neste dia" : `${formatBRL(total)} (${qty} × ${formatBRL(ticketPrice)})`,
       businessName: BUSINESS_NAME,
     });
     window.open(whatsappLink(whatsappNumber, message), "_blank", "noopener");
@@ -97,9 +108,10 @@ export function Booking({ whatsappNumber, ticketPrice }: Props) {
             <div className="flex items-center justify-between gap-4 border-b-2 border-dashed border-forest-900/25 bg-gradient-to-br from-sun-500 to-ember-500 px-8 py-6 text-forest-900 max-sm:px-5">
               <span className="font-display font-extrabold tracking-[0.2em] uppercase">Ingresso</span>
               <span className="font-display text-[1.7rem] leading-none font-extrabold max-sm:text-[1.4rem]">
-                {formatBRL(ticketPrice)} <small className="text-[0.85rem] font-semibold opacity-80">/ pessoa</small>
+                {formatBRL(ticketPrice)} <small className="text-[0.85rem] font-semibold opacity-80">/ {priceUnitLabel(chargeMode).replace("por pessoa", "pessoa")}</small>
               </span>
             </div>
+            {note && <p className="bg-forest-100 px-8 py-2 text-center text-[0.8rem] font-medium text-forest-800 max-sm:px-5">{note}</p>}
 
             <form onSubmit={submit} noValidate className="grid gap-4 px-8 pt-7 pb-6 max-sm:px-5">
               <div className="grid gap-1.5">
@@ -135,11 +147,18 @@ export function Booking({ whatsappNumber, ticketPrice }: Props) {
                 <input id="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="(92) 99999-9999" value={phone} onChange={(e) => setPhone(maskPhone(e.target.value))} className={inputCls(invalid.phone)} />
               </div>
 
-              <div className="flex items-baseline justify-between rounded-2xl bg-forest-100 px-5 py-4 font-display font-semibold text-forest-800">
-                <span>Total</span>
-                <motion.strong key={total} initial={{ scale: 1.1 }} animate={{ scale: 1 }} className="text-[1.8rem] font-extrabold text-forest-700">
-                  {formatBRL(total)}
-                </motion.strong>
+              <div className="rounded-2xl bg-forest-100 px-5 py-4 font-display font-semibold text-forest-800">
+                <div className="flex items-baseline justify-between">
+                  <span>Total</span>
+                  <motion.strong key={`${total}-${freeDay}`} initial={{ scale: 1.1 }} animate={{ scale: 1 }} className="text-[1.8rem] font-extrabold text-forest-700">
+                    {freeDay ? "Grátis" : formatBRL(total)}
+                  </motion.strong>
+                </div>
+                {chargeMode === "sundays_holidays" && (
+                  <p className="mt-1 text-right text-xs font-normal text-ink-3">
+                    {date === "" ? "Escolha a data para calcular" : freeDay ? "Entrada gratuita neste dia" : `${qty} × ${formatBRL(ticketPrice)} · domingo ou feriado`}
+                  </p>
+                )}
               </div>
 
               {error && (

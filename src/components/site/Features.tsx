@@ -17,11 +17,11 @@ export function Features({ items }: { items: Feature[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section id="estrutura" className="overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
+    <section id="atracoes" className="overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
         <div className="mb-[clamp(2rem,5vw,3.5rem)] max-w-[640px]">
           <Reveal>
-            <span className="eyebrow text-forest-500">Estrutura</span>
+            <span className="eyebrow text-forest-500">Atrações</span>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.1] font-extrabold text-forest-800">O que você encontra por aqui</h2>

@@ -6,7 +6,7 @@ import { createAuthenticatedClient } from "@/server/supabase/server";
 import { fileFrom, removeStoredFile, uploadImage } from "@/server/upload";
 import { bool, fail, revalidateSite, str, type FormState } from "@/server/actions/shared";
 
-const ADMIN_PATH = "/admin/estrutura";
+const ADMIN_PATH = "/admin/atracoes";
 
 const schema = z.object({
   title: z.string().min(1, "Informe o título.").max(80),

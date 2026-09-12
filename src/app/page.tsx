@@ -12,6 +12,7 @@ import { Hero } from "@/components/site/Hero";
 import { Location } from "@/components/site/Location";
 import { getSiteUrl } from "@/lib/env";
 import { formatBRL } from "@/lib/format";
+import { priceUnitLabel } from "@/lib/pricing";
 import { BUSINESS_NAME } from "@/lib/types";
 import { getSiteContent } from "@/server/repositories/content";
 
@@ -30,7 +31,7 @@ function absolute(url: string | null): string | undefined {
 export async function generateMetadata(): Promise<Metadata> {
   const { settings: s } = await getSiteContent();
   const title = `${BUSINESS_NAME} — ${s.address}`;
-  const description = `${s.heroSubtitle} Entrada ${formatBRL(s.ticketPrice)} por pessoa. ${s.hours}.`;
+  const description = `${s.heroSubtitle} Entrada ${formatBRL(s.ticketPrice)} ${priceUnitLabel(s.chargeMode)}. ${s.hours}.`;
   const image = absolute(s.heroImage);
   return {
     metadataBase: new URL(getSiteUrl()),
@@ -76,7 +77,13 @@ export default async function HomePage() {
         <Features items={features} />
         <Gallery categories={gallery} />
         <Foods items={foods} />
-        <Booking whatsappNumber={settings.whatsappNumber} ticketPrice={settings.ticketPrice} />
+        <Booking
+          whatsappNumber={settings.whatsappNumber}
+          ticketPrice={settings.ticketPrice}
+          chargeMode={settings.chargeMode}
+          extraHolidays={settings.extraHolidays}
+          pricingNote={settings.pricingNote}
+        />
         <FinalCTA s={settings} />
         <Location s={settings} />
       </main>

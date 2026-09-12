@@ -10,7 +10,7 @@ const NAV = [
   { href: "/admin", label: "Início", icon: "⌂" },
   { href: "/admin/geral", label: "Textos e imagens", icon: "✎" },
   { href: "/admin/whatsapp-preco", label: "WhatsApp e preço", icon: "☏" },
-  { href: "/admin/estrutura", label: "Estrutura", icon: "▦" },
+  { href: "/admin/atracoes", label: "Atrações", icon: "▦" },
   { href: "/admin/galeria", label: "Galeria", icon: "▣" },
   { href: "/admin/comidas", label: "Comidas", icon: "♨" },
   { href: "/admin/localizacao", label: "Localização", icon: "◎" },

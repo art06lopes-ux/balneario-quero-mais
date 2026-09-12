@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   ["#inicio", "Início"],
   ["#sobre", "Sobre"],
-  ["#estrutura", "Estrutura"],
+  ["#atracoes", "Atrações"],
   ["#galeria", "Galeria"],
   ["#comidas", "Comidas"],
   ["#reservar", "Reservar"],

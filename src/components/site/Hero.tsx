@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Logo3D } from "@/components/site/Logo3D";
 import { Reveal } from "@/components/site/Reveal";
 import { formatBRL } from "@/lib/format";
+import { defaultPricingNote, priceUnitLabel } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/types";
 
 export function Hero({ s }: { s: SiteSettings }) {
@@ -45,7 +46,10 @@ export function Hero({ s }: { s: SiteSettings }) {
             <div className="mb-7 inline-flex flex-wrap items-baseline gap-x-2.5 gap-y-1 rounded-2xl border border-white/30 bg-white/10 px-5 py-3 backdrop-blur-md">
               <span className="font-display text-xs font-semibold tracking-[0.12em] text-sun-500 uppercase">Entrada</span>
               <span className="font-display text-[clamp(1.7rem,3.5vw,2.3rem)] leading-none font-extrabold">{formatBRL(s.ticketPrice)}</span>
-              <span className="text-[0.95rem] text-white/85">por pessoa</span>
+              <span className="text-[0.95rem] text-white/85">{priceUnitLabel(s.chargeMode)}</span>
+              {(s.pricingNote || defaultPricingNote(s.chargeMode)) && (
+                <span className="basis-full text-[0.82rem] text-white/75">{s.pricingNote || defaultPricingNote(s.chargeMode)}</span>
+              )}
             </div>
           </Reveal>
 

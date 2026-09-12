@@ -24,7 +24,7 @@ export function About({ s }: { s: SiteSettings }) {
           <Reveal delay={0.2}>
             <div className="mt-8 flex flex-wrap gap-6 border-t border-forest-900/10 pt-6">
               <Stat value="7 dias" label="aberto por semana" />
-              <Stat value={formatBRL(s.ticketPrice).replace(",00", "")} label="entrada por pessoa" />
+              <Stat value={formatBRL(s.ticketPrice).replace(",00", "")} label={s.chargeMode === "sundays_holidays" ? "entrada (dom. e feriados)" : "entrada por pessoa"} />
               <Stat value="Km 19" label="estrada de Novo Airão" />
             </div>
           </Reveal>

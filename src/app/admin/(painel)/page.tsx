@@ -7,7 +7,7 @@ import { getFeaturesForAdmin, getFoodForAdmin, getGalleryForAdmin, getSettingsRo
 const LINKS = [
   { href: "/admin/geral", title: "Textos e imagens", desc: "Hero, Sobre, chamada final, logo e Instagram." },
   { href: "/admin/whatsapp-preco", title: "WhatsApp e preço", desc: "Número que recebe as reservas e valor da entrada." },
-  { href: "/admin/estrutura", title: "Estrutura", desc: "Cards do que o balneário oferece." },
+  { href: "/admin/atracoes", title: "Atrações", desc: "Cards do que o balneário oferece." },
   { href: "/admin/galeria", title: "Galeria", desc: "Fotos por categoria, ordem e legendas." },
   { href: "/admin/comidas", title: "Comidas", desc: "Pratos com foto, descrição e preço opcional." },
   { href: "/admin/localizacao", title: "Localização", desc: "Endereço, horário, observações e mapa." },
@@ -35,7 +35,7 @@ export default async function AdminHome() {
       </div>
       <Card className="mt-6">
         <p className="text-sm text-ink-2">
-          Itens de estrutura: <strong>{features.length}</strong> · Categorias da galeria: <strong>{gallery.categories.length}</strong>
+          Atrações: <strong>{features.length}</strong> · Categorias da galeria: <strong>{gallery.categories.length}</strong>
         </p>
       </Card>
     </>

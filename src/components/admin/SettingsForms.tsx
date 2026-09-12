@@ -89,10 +89,33 @@ export function CommerceForm({ row }: { row: SettingsRow }) {
         <p className="mt-3 text-xs text-ink-3">Este número é usado em todos os botões de reserva, no botão flutuante e na seção de localização.</p>
       </Card>
       <Card title="Preço da entrada">
-        <Field label="Valor por pessoa (R$)" htmlFor="ticket_price">
-          <Input id="ticket_price" name="ticket_price" inputMode="decimal" defaultValue={price} required className="max-w-[200px]" />
-        </Field>
-        <p className="mt-3 text-xs text-ink-3">O total da reserva é calculado automaticamente: quantidade de pessoas × este valor.</p>
+        <div className="grid gap-4">
+          <Field label="Valor por pessoa (R$)" htmlFor="ticket_price">
+            <Input id="ticket_price" name="ticket_price" inputMode="decimal" defaultValue={price} required className="max-w-[200px]" />
+          </Field>
+          <Field label="Quando a entrada é cobrada" htmlFor="charge_mode">
+            <select
+              id="charge_mode"
+              name="charge_mode"
+              defaultValue={row.charge_mode ?? "always"}
+              className="w-full max-w-[360px] rounded-xl border border-forest-900/15 bg-white px-3.5 py-2.5 text-[0.95rem] text-ink outline-none focus:border-forest-500 focus:ring-4 focus:ring-forest-500/15"
+            >
+              <option value="always">Todos os dias</option>
+              <option value="sundays_holidays">Só aos domingos e feriados (demais dias grátis)</option>
+            </select>
+          </Field>
+          <Field
+            label="Feriados extras (estaduais e municipais)"
+            htmlFor="extra_holidays"
+            hint="Os feriados nacionais (Carnaval, Sexta-feira Santa, Tiradentes, Corpus Christi, 7 de setembro etc.) já são reconhecidos. Aqui entram os do Amazonas e de Novo Airão: um por linha, no formato dd/mm (todo ano) ou dd/mm/aaaa (só naquele ano)."
+          >
+            <Textarea id="extra_holidays" name="extra_holidays" defaultValue={row.extra_holidays ?? ""} placeholder={"05/09\n08/12"} className="max-w-[360px]" />
+          </Field>
+          <Field label="Frase junto do preço (opcional)" htmlFor="pricing_note" hint="Vazio = texto automático (Cobrada aos domingos e feriados. Nos demais dias, entrada gratuita.)">
+            <Input id="pricing_note" name="pricing_note" defaultValue={row.pricing_note ?? ""} maxLength={160} />
+          </Field>
+          <p className="text-xs text-ink-3">O total da reserva é calculado pela data escolhida: em dia sem cobrança, o site mostra &ldquo;Grátis&rdquo;.</p>
+        </div>
       </Card>
       <div className="flex justify-end">
         <Button type="submit" size="lg" loading={pending}>Salvar</Button>

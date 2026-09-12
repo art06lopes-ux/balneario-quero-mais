@@ -1,8 +1,13 @@
 /** Tipos do conteúdo público, já com URLs resolvidas (prontos para renderizar). */
+import type { ChargeMode } from "@/lib/pricing";
+
 
 export type SiteSettings = {
   whatsappNumber: string;
   ticketPrice: number;
+  chargeMode: ChargeMode;
+  extraHolidays: string;
+  pricingNote: string;
   heroKicker: string;
   heroTitle: string;
   heroSubtitle: string;

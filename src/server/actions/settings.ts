@@ -105,6 +105,9 @@ const commerceSchema = z.object({
     .string()
     .regex(/^[0-9]{10,15}$/, "Informe o WhatsApp com DDI e DDD, só números (ex.: 5592999999999)."),
   ticket_price: z.number().min(0, "O preço não pode ser negativo.").max(100000),
+  charge_mode: z.enum(["always", "sundays_holidays"]),
+  extra_holidays: z.string().max(2000),
+  pricing_note: z.string().max(160),
 });
 
 export async function updateCommerce(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -114,6 +117,9 @@ export async function updateCommerce(_prev: FormState, formData: FormData): Prom
     const parsed = commerceSchema.safeParse({
       whatsapp_number: str(formData, "whatsapp_number").replace(/\D/g, ""),
       ticket_price: Number(priceRaw),
+      charge_mode: str(formData, "charge_mode") === "sundays_holidays" ? "sundays_holidays" : "always",
+      extra_holidays: str(formData, "extra_holidays"),
+      pricing_note: str(formData, "pricing_note"),
     });
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Dados inválidos.", success: null };
 

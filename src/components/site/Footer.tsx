@@ -5,6 +5,7 @@ import { BUSINESS_NAME } from "@/lib/types";
 const LINKS = [
   ["#inicio", "Início"],
   ["#sobre", "Sobre"],
+  ["#atracoes", "Atrações"],
   ["#galeria", "Galeria"],
   ["#comidas", "Comidas"],
   ["#reservar", "Reservar"],
