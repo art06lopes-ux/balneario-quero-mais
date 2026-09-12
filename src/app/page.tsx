@@ -111,6 +111,7 @@ export default async function HomePage() {
           <Marquee
             items={[
               "Igarapé de água escura",
+              ...(settings.liveMusic ? [settings.liveMusic] : []),
               "Redário dentro d\u2019água",
               "Bar & restaurante",
               "Aberto todos os dias",

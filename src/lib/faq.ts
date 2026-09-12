@@ -26,6 +26,14 @@ export function buildFaq(s: SiteSettings): FaqItem[] {
       q: "Tem comida no local?",
       a: "Sim. O bar e restaurante serve culinária regional, com o peixe grelhado como prato da casa. Veja os pratos na seção Comidas.",
     },
+    ...(s.liveMusic
+      ? [
+          {
+            q: "Tem música ao vivo?",
+            a: `${s.liveMusic}. Confira a programação da semana no Instagram do balneário.`,
+          },
+        ]
+      : []),
     {
       q: "Posso levar meu pet?",
       a: s.petsAllowed
