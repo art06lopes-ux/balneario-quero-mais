@@ -63,7 +63,7 @@ export function Header({ logo }: { logo: string | null }) {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 h-[76px] transition-[background-color,box-shadow,backdrop-filter] duration-300",
-        scrolled && !open && "bg-sand/90 shadow-[0_4px_24px_rgba(8,47,34,.10)] backdrop-blur-xl",
+        scrolled && !open && "bg-sand/95 shadow-[0_4px_24px_rgba(8,47,34,.10)] backdrop-blur-md",
         open && "bg-forest-950",
       )}
     >

@@ -32,8 +32,8 @@ export function Foods({ items }: { items: FoodItem[] }) {
       <svg className="absolute inset-x-0 top-0 h-[40px] w-full text-sand sm:h-[70px]" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden>
         <path fill="currentColor" d="M0,0 L1440,0 L1440,25 C1200,70 960,70 720,35 C480,0 240,0 0,35 Z" />
       </svg>
-      <div className="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full bg-sun-500/15 blur-3xl" aria-hidden />
-      <div className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full bg-river-500/20 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(247,181,0,0.24)_0%,transparent_70%)]" aria-hidden />
+      <div className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full [background:radial-gradient(circle,rgba(29,127,214,0.32)_0%,transparent_70%)]" aria-hidden />
 
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
         <SectionTitle index="04" eyebrow="Comidas" title="Sabor regional à beira do igarapé" tone="dark" className="mb-[clamp(2rem,5vw,3.5rem)]" />

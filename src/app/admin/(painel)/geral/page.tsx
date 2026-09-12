@@ -9,7 +9,11 @@ export default async function GeralPage() {
   const b = getSupabaseUrl();
   return (
     <>
-      <PageHeader title="Textos e imagens" description="Os textos e fotos de destaque do site. Salve uma vez ao final." />
+      <PageHeader
+        title="Textos e imagens"
+        description="Os textos e fotos de destaque do site. Salve uma vez ao final."
+        siteAnchor="#inicio"
+      />
       <GeneralForm
         row={row}
         urls={{

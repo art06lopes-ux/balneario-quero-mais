@@ -12,7 +12,7 @@ export function FAQ({ items }: { items: FaqItem[] }) {
 
   return (
     <section id="perguntas" className="relative overflow-hidden py-[clamp(4rem,9vw,7.5rem)]">
-      <div className="pointer-events-none absolute -right-32 top-10 size-[420px] rounded-full bg-sun-500/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -right-32 top-10 size-[420px] rounded-full [background:radial-gradient(circle,rgba(247,181,0,0.16)_0%,transparent_70%)]" aria-hidden />
       <div className="mx-auto grid w-[min(1180px,100%-2.5rem)] gap-10 md:grid-cols-[0.8fr_1.2fr]">
         <div>
           <SectionTitle index="06" eyebrow="Dúvidas" title="Perguntas frequentes" className="mb-4" />

@@ -6,7 +6,11 @@ export default async function CommercePage() {
   const row = await getSettingsRow();
   return (
     <>
-      <PageHeader title="WhatsApp e preço" description="O número que recebe as reservas e o valor da entrada por pessoa." />
+      <PageHeader
+        title="WhatsApp e preço"
+        description="O número que recebe as reservas e o valor da entrada por pessoa."
+        siteAnchor="#reservar"
+      />
       <CommerceForm row={row} />
     </>
   );

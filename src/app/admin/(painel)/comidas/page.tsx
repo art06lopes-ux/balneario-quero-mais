@@ -6,7 +6,11 @@ export default async function FoodPage() {
   const items = await getFoodForAdmin();
   return (
     <>
-      <PageHeader title="Comidas" description="Pratos da seção Comidas do site. Cada prato com foto também aparece automaticamente na aba Comidas da galeria. O preço é opcional." />
+      <PageHeader
+        title="Comidas"
+        description="Pratos da seção Comidas do site. Cada prato com foto também aparece automaticamente na aba Comidas da galeria. O preço é opcional."
+        siteAnchor="#comidas"
+      />
       <FoodManager items={items} />
     </>
   );

@@ -20,7 +20,15 @@ type Props = {
  * Campo de imagem com pré-visualização antes de salvar. O arquivo é
  * otimizado no navegador (redimensionado/comprimido) assim que é escolhido.
  */
-export function ImageField({ name, label, current, removable, hint, aspect = "aspect-video", required }: Props) {
+export function ImageField({
+  name,
+  label,
+  current,
+  removable,
+  hint,
+  aspect = "aspect-video",
+  required,
+}: Props) {
   const id = useId();
   const [preview, setPreview] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -56,7 +64,12 @@ export function ImageField({ name, label, current, removable, hint, aspect = "as
     <div className="grid gap-2">
       <span className="font-display text-sm font-semibold text-ink-2">{label}</span>
       <div className="grid gap-3 sm:grid-cols-[180px_1fr]">
-        <div className={cn("relative overflow-hidden rounded-xl border border-forest-900/10 bg-forest-100", aspect)}>
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-xl border border-forest-900/10 bg-forest-100",
+            aspect,
+          )}
+        >
           {shown ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={shown} alt="" className="h-full w-full object-cover" />
@@ -64,7 +77,9 @@ export function ImageField({ name, label, current, removable, hint, aspect = "as
             <span className="grid h-full place-items-center text-xs text-ink-3">Sem imagem</span>
           )}
           {preview && (
-            <span className="absolute top-1.5 left-1.5 rounded-full bg-sun-500 px-2 py-0.5 text-[10px] font-bold text-forest-900">NOVA</span>
+            <span className="absolute top-1.5 left-1.5 rounded-full bg-sun-500 px-2 py-0.5 text-[10px] font-bold text-forest-900">
+              NOVA
+            </span>
           )}
         </div>
         <div className="grid content-start gap-2">

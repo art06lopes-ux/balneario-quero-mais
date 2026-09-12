@@ -56,7 +56,7 @@ export function MobileCTA({ price, chargeMode }: { price: number; chargeMode: Ch
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 90, opacity: 0 }}
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
-          className="fixed inset-x-3 bottom-3 z-[55] flex items-center gap-3 rounded-2xl border border-white/15 bg-forest-950/90 p-2 pl-4 text-white shadow-deep backdrop-blur-xl md:hidden"
+          className="fixed inset-x-3 bottom-3 z-[55] flex items-center gap-3 rounded-2xl border border-white/15 bg-forest-950/95 p-2 pl-4 text-white shadow-deep md:hidden"
           style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
         >
           <div className="min-w-0 flex-1 leading-tight">

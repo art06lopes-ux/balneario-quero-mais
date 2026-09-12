@@ -6,7 +6,7 @@ export default async function LocationPage() {
   const row = await getSettingsRow();
   return (
     <>
-      <PageHeader title="Localização e funcionamento" />
+      <PageHeader title="Localização e funcionamento" siteAnchor="#localizacao" />
       <LocationForm row={row} />
     </>
   );

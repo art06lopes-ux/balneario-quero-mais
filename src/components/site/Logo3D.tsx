@@ -70,15 +70,15 @@ export function Logo3D({ src, alt = "Balneário Quero Mais", size = 64, tilt = 1
         className="preserve-3d relative h-full w-full rounded-full"
         style={{ rotateX: reduce ? 0 : rx, rotateY: reduce ? 0 : ry }}
       >
-        {/* sombra profunda, deslocada para trás */}
+        {/* sombra profunda, deslocada para trás (box-shadow: barata, sem filter) */}
         <div
-          className="absolute inset-[6%] rounded-full bg-forest-950/50 blur-xl"
-          style={{ transform: "translateZ(-40px) translateY(14%)" }}
+          className="absolute inset-[6%] rounded-full"
+          style={{ transform: "translateZ(-40px) translateY(14%)", boxShadow: "0 24px 48px 8px rgba(4,24,15,.45)" }}
           aria-hidden
         />
         {/* aro de luz */}
         <div
-          className="absolute -inset-[3%] rounded-full bg-[conic-gradient(from_200deg,rgba(247,181,0,.9),rgba(31,138,76,.6),rgba(29,127,214,.7),rgba(247,181,0,.9))] opacity-80 blur-[2px]"
+          className="absolute -inset-[3%] rounded-full bg-[conic-gradient(from_200deg,rgba(247,181,0,.9),rgba(31,138,76,.6),rgba(29,127,214,.7),rgba(247,181,0,.9))] opacity-80"
           style={{ transform: "translateZ(-6px)" }}
           aria-hidden
         />

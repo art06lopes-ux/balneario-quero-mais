@@ -6,7 +6,11 @@ export default async function FeaturesPage() {
   const items = await getFeaturesForAdmin();
   return (
     <>
-      <PageHeader title="Atrações" description="Os cards de 'O que você encontra por aqui' no site. Arraste para reordenar." />
+      <PageHeader
+        title="Atrações"
+        description="Os cards de 'O que você encontra por aqui' no site. Arraste para reordenar."
+        siteAnchor="#atracoes"
+      />
       <FeaturesManager items={items} />
     </>
   );

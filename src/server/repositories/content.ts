@@ -34,6 +34,7 @@ export type SettingsRow = {
   google_rating_count: number | null;
   google_reviews_url: string;
   instagram_followers: string;
+  updated_at?: string;
 };
 
 export type FeatureRow = {
@@ -106,8 +107,27 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
   };
 }
 
-/** Conteúdo completo do site público, com URLs resolvidas. */
+/**
+ * Conteúdo completo do site público, com URLs resolvidas.
+ *
+ * Com tentativas: o build da Vercel prerrenderiza a home e um projeto
+ * Supabase "frio" às vezes responde Gateway Timeout na primeira chamada.
+ * Sem isso, um soluço de 2 segundos derruba o deploy inteiro.
+ */
 export async function getSiteContent(client?: SupabaseClient): Promise<SiteContent> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      return await loadSiteContent(client);
+    } catch (e) {
+      lastError = e;
+      if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 2500));
+    }
+  }
+  throw lastError;
+}
+
+async function loadSiteContent(client?: SupabaseClient): Promise<SiteContent> {
   const supabase = client ?? getPublicSupabaseClient();
   const base = getSupabaseUrl();
 

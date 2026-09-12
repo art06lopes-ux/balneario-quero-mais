@@ -20,7 +20,7 @@ export function Footer({ s }: { s: SiteSettings }) {
       <svg className="absolute inset-x-0 top-0 h-[40px] w-full text-sand sm:h-[60px]" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden>
         <path fill="currentColor" d="M0,0 L1440,0 L1440,20 C1200,60 960,60 720,30 C480,0 240,0 0,30 Z" />
       </svg>
-      <div className="pointer-events-none absolute -bottom-40 -left-20 size-[420px] rounded-full bg-forest-500/20 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -bottom-40 -left-20 size-[420px] rounded-full [background:radial-gradient(circle,rgba(31,138,76,0.32)_0%,transparent_70%)]" aria-hidden />
 
       <div className="mx-auto w-[min(1180px,100%-2.5rem)] pt-8">
         <div className="grid gap-10 border-b border-white/10 pb-10 md:grid-cols-[1.3fr_0.8fr_1fr]">

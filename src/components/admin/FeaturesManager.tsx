@@ -10,7 +10,13 @@ import { Toast } from "@/components/ui/Toast";
 import { deleteFeature, reorderFeatures, saveFeature } from "@/server/actions/features";
 import type { FormState } from "@/server/actions/shared";
 
-export type FeatureView = { id: string; title: string; description: string; image: string | null; is_active: boolean };
+export type FeatureView = {
+  id: string;
+  title: string;
+  description: string;
+  image: string | null;
+  is_active: boolean;
+};
 
 const IDLE: FormState = { error: null, success: null };
 
@@ -28,7 +34,12 @@ export function FeaturesManager({ items }: { items: FeatureView[] }) {
 
       {adding && (
         <Card title="Novo item">
-          <FeatureForm onDone={(s) => { setToast(s); if (s.success) setAdding(false); }} />
+          <FeatureForm
+            onDone={(s) => {
+              setToast(s);
+              if (s.success) setAdding(false);
+            }}
+          />
         </Card>
       )}
 
@@ -68,47 +79,92 @@ function FeatureCard({ f, onToast }: { f: FeatureView; onToast: (s: FormState) =
         <div className="min-w-0 flex-1 pr-28">
           <h3 className="truncate font-display font-bold text-forest-800">
             {f.title}
-            {!f.is_active && <span className="ml-2 rounded-full bg-forest-100 px-2 py-0.5 text-[10px] font-semibold text-ink-3 uppercase">oculto</span>}
+            {!f.is_active && (
+              <span className="ml-2 rounded-full bg-forest-100 px-2 py-0.5 text-[10px] font-semibold text-ink-3 uppercase">
+                oculto
+              </span>
+            )}
           </h3>
           <p className="line-clamp-2 text-sm text-ink-2">{f.description}</p>
           <div className="mt-2 flex gap-2">
-            <Button size="sm" variant="secondary" onClick={() => setEditing((v) => !v)}>{editing ? "Fechar" : "Editar"}</Button>
-            <Button size="sm" variant="ghost" onClick={remove} loading={pending} className="text-[#9c2626]">Remover</Button>
+            <Button size="sm" variant="secondary" onClick={() => setEditing((v) => !v)}>
+              {editing ? "Fechar" : "Editar"}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={remove}
+              loading={pending}
+              className="text-[#9c2626]"
+            >
+              Remover
+            </Button>
           </div>
         </div>
       </div>
       {editing && (
         <div className="mt-4 border-t border-forest-900/10 pt-4">
-          <FeatureForm feature={f} onDone={(s) => { onToast(s); if (s.success) setEditing(false); }} />
+          <FeatureForm
+            feature={f}
+            onDone={(s) => {
+              onToast(s);
+              if (s.success) setEditing(false);
+            }}
+          />
         </div>
       )}
     </div>
   );
 }
 
-function FeatureForm({ feature, onDone }: { feature?: FeatureView; onDone: (s: FormState) => void }) {
-  const [state, action, pending] = useActionState(
-    async (_prev: FormState, fd: FormData) => {
-      const r = await saveFeature(_prev, fd);
-      onDone(r);
-      return r;
-    },
-    IDLE,
-  );
+function FeatureForm({
+  feature,
+  onDone,
+}: {
+  feature?: FeatureView;
+  onDone: (s: FormState) => void;
+}) {
+  const [state, action, pending] = useActionState(async (_prev: FormState, fd: FormData) => {
+    const r = await saveFeature(_prev, fd);
+    onDone(r);
+    return r;
+  }, IDLE);
   return (
     <form action={action} className="grid gap-4">
       {feature && <input type="hidden" name="id" value={feature.id} />}
       <Field label="Título" htmlFor={`title-${feature?.id ?? "new"}`}>
-        <Input id={`title-${feature?.id ?? "new"}`} name="title" defaultValue={feature?.title} maxLength={80} required />
+        <Input
+          id={`title-${feature?.id ?? "new"}`}
+          name="title"
+          defaultValue={feature?.title}
+          maxLength={80}
+          required
+        />
       </Field>
       <Field label="Descrição curta" htmlFor={`desc-${feature?.id ?? "new"}`}>
-        <Textarea id={`desc-${feature?.id ?? "new"}`} name="description" defaultValue={feature?.description} maxLength={300} className="min-h-[80px]" />
+        <Textarea
+          id={`desc-${feature?.id ?? "new"}`}
+          name="description"
+          defaultValue={feature?.description}
+          maxLength={300}
+          className="min-h-[80px]"
+        />
       </Field>
-      <ImageField name="image" label="Foto" current={feature?.image} aspect="aspect-[3/4]" required={!feature} />
-      {feature && <Checkbox name="is_active" label="Visível no site" defaultChecked={feature.is_active} />}
+      <ImageField
+        name="image"
+        label="Foto"
+        current={feature?.image}
+        aspect="aspect-[3/4]"
+        required={!feature}
+      />
+      {feature && (
+        <Checkbox name="is_active" label="Visível no site" defaultChecked={feature.is_active} />
+      )}
       {state.error && <p className="text-sm text-[#b93232]">{state.error}</p>}
       <div className="flex justify-end">
-        <Button type="submit" loading={pending}>{feature ? "Salvar" : "Adicionar"}</Button>
+        <Button type="submit" loading={pending}>
+          {feature ? "Salvar" : "Adicionar"}
+        </Button>
       </div>
     </form>
   );

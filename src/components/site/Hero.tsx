@@ -12,13 +12,15 @@ import type { SiteSettings } from "@/lib/types";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Luzes suaves flutuando (Loop) — lembram sol entre as folhas. */
+/**
+ * Luzes suaves flutuando (Loop) — lembram sol entre as folhas.
+ * Sem `filter: blur` (caro de animar): o desfoque é o próprio gradiente
+ * radial, que a GPU só move. Aparecem só em telas grandes.
+ */
 const BOKEH = [
-  { x: "12%", y: "22%", s: 180, d: 11, delay: 0, c: "rgba(247,181,0,.22)" },
-  { x: "68%", y: "18%", s: 260, d: 14, delay: 2, c: "rgba(247,181,0,.16)" },
-  { x: "82%", y: "70%", s: 200, d: 12, delay: 4, c: "rgba(31,138,76,.28)" },
-  { x: "30%", y: "78%", s: 150, d: 10, delay: 1, c: "rgba(29,127,214,.22)" },
-  { x: "50%", y: "45%", s: 120, d: 13, delay: 3, c: "rgba(255,255,255,.12)" },
+  { x: "10%", y: "18%", s: 420, d: 13, delay: 0, c: "247,181,0", a: 0.28 },
+  { x: "62%", y: "8%", s: 560, d: 16, delay: 3, c: "247,181,0", a: 0.2 },
+  { x: "78%", y: "62%", s: 460, d: 14, delay: 6, c: "31,138,76", a: 0.32 },
 ];
 
 export function Hero({ s }: { s: SiteSettings }) {
@@ -52,23 +54,29 @@ export function Hero({ s }: { s: SiteSettings }) {
           />
         )}
       </motion.div>
-      <div className="absolute inset-0 -z-10 bg-forest-700/35 mix-blend-multiply" aria-hidden />
+      {/* Tinta verde-floresta + luz quente + vinheta, tudo em uma camada sem blend (barata de compor) */}
       <div
-        className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_78%_8%,rgba(247,181,0,.28),transparent_70%),radial-gradient(120%_90%_at_50%_50%,transparent_45%,rgba(4,24,15,.75)_100%),linear-gradient(180deg,rgba(8,47,34,.45)_0%,rgba(8,47,34,.15)_40%,rgba(8,47,34,.7)_100%),linear-gradient(90deg,rgba(8,47,34,.6)_0%,rgba(8,47,34,.05)_65%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_78%_8%,rgba(247,181,0,.26),transparent_70%),radial-gradient(120%_90%_at_50%_50%,transparent_40%,rgba(4,24,15,.78)_100%),linear-gradient(180deg,rgba(8,47,34,.55)_0%,rgba(15,90,60,.28)_40%,rgba(8,47,34,.75)_100%),linear-gradient(90deg,rgba(8,47,34,.6)_0%,rgba(8,47,34,.08)_65%)]"
         aria-hidden
       />
-      {/* Grão fino: tira o aspecto "digital" da foto ampliada */}
-      <div className="grain absolute inset-0 -z-10 opacity-[.07]" aria-hidden />
+      {/* Grão fino: só em telas grandes, sem blend */}
+      <div className="grain absolute inset-0 -z-10 hidden opacity-[.05] md:block" aria-hidden />
 
-      {/* Bokeh flutuante */}
+      {/* Bokeh flutuante (desktop) */}
       {!reduce &&
         BOKEH.map((b, i) => (
           <motion.span
             key={i}
             aria-hidden
-            className="pointer-events-none absolute -z-10 rounded-full blur-2xl"
-            style={{ left: b.x, top: b.y, width: b.s, height: b.s, background: b.c }}
-            animate={{ y: [0, -28, 0], x: [0, 14, 0], scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
+            className="pointer-events-none absolute -z-10 hidden rounded-full will-change-transform md:block"
+            style={{
+              left: b.x,
+              top: b.y,
+              width: b.s,
+              height: b.s,
+              background: `radial-gradient(circle, rgba(${b.c},${b.a}) 0%, rgba(${b.c},${b.a * 0.5}) 30%, rgba(${b.c},0) 70%)`,
+            }}
+            animate={{ y: [0, -30, 0], x: [0, 18, 0] }}
             transition={{ duration: b.d, delay: b.delay, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}

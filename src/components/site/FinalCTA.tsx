@@ -22,9 +22,8 @@ export function FinalCTA({ s }: { s: SiteSettings }) {
           <Image src={s.ctaImage} alt="" fill sizes="100vw" className="object-cover object-[50%_60%] saturate-[1.1]" />
         </motion.div>
       )}
-      <div className="absolute inset-0 -z-10 bg-forest-700/30 mix-blend-multiply" aria-hidden />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(15,95,168,.55),rgba(8,47,34,.82))]" aria-hidden />
-      <div className="grain absolute inset-0 -z-10 opacity-[.06]" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(15,95,168,.6),rgba(8,47,34,.86))]" aria-hidden />
+      <div className="grain absolute inset-0 -z-10 hidden opacity-[.05] md:block" aria-hidden />
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
         <SplitWords
           as="h2"

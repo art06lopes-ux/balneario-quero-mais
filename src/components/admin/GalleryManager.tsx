@@ -8,7 +8,15 @@ import { Field, Input } from "@/components/ui/Field";
 import { Toast } from "@/components/ui/Toast";
 import { optimizeInputFiles } from "@/lib/imageClient";
 import { cn } from "@/lib/utils";
-import { addPhotos, deleteCategory, deletePhoto, reorderCategories, reorderPhotos, saveCategory, updatePhoto } from "@/server/actions/gallery";
+import {
+  addPhotos,
+  deleteCategory,
+  deletePhoto,
+  reorderCategories,
+  reorderPhotos,
+  saveCategory,
+  updatePhoto,
+} from "@/server/actions/gallery";
 import type { FormState } from "@/server/actions/shared";
 
 export type CategoryView = { id: string; name: string; slug: string };
@@ -17,7 +25,13 @@ export type PhotoView = { id: string; category_id: string; src: string; alt: str
 const IDLE: FormState = { error: null, success: null };
 const FOOD_SLUG = "comidas";
 
-export function GalleryManager({ categories: all, photos }: { categories: CategoryView[]; photos: PhotoView[] }) {
+export function GalleryManager({
+  categories: all,
+  photos,
+}: {
+  categories: CategoryView[];
+  photos: PhotoView[];
+}) {
   // A categoria "Comidas" não é gerida aqui: ela é alimentada automaticamente
   // pelos pratos cadastrados na aba Comidas.
   const categories = all.filter((c) => c.slug !== FOOD_SLUG);
@@ -29,13 +43,24 @@ export function GalleryManager({ categories: all, photos }: { categories: Catego
   return (
     <div className="grid gap-6">
       <Card title="Categorias">
-        <p className="mb-4 text-sm text-ink-3">O visitante filtra a galeria por estas abas. Arraste para mudar a ordem. As fotos dos pratos cadastrados em <strong>Comidas</strong> entram sozinhas na aba &ldquo;Comidas&rdquo; da galeria do site — não precisa enviar aqui.</p>
+        <p className="mb-4 text-sm text-ink-3">
+          O visitante filtra a galeria por estas abas. Arraste para mudar a ordem. As fotos dos
+          pratos cadastrados em <strong>Comidas</strong> entram sozinhas na aba
+          &ldquo;Comidas&rdquo; da galeria do site — não precisa enviar aqui.
+        </p>
         <Sortable
           items={categories}
           onReorder={reorderCategories}
           onResult={setToast}
           className="mb-4"
-          render={(c) => <CategoryRow c={c} activeId={current?.id} onSelect={() => setActive(c.id)} onToast={setToast} />}
+          render={(c) => (
+            <CategoryRow
+              c={c}
+              activeId={current?.id}
+              onSelect={() => setActive(c.id)}
+              onToast={setToast}
+            />
+          )}
         />
         <NewCategoryForm onDone={setToast} />
       </Card>
@@ -63,7 +88,17 @@ export function GalleryManager({ categories: all, photos }: { categories: Catego
   );
 }
 
-function CategoryRow({ c, activeId, onSelect, onToast }: { c: CategoryView; activeId?: string; onSelect: () => void; onToast: (s: FormState) => void }) {
+function CategoryRow({
+  c,
+  activeId,
+  onSelect,
+  onToast,
+}: {
+  c: CategoryView;
+  activeId?: string;
+  onSelect: () => void;
+  onToast: (s: FormState) => void;
+}) {
   const [renaming, setRenaming] = useState(false);
   const [pending, start] = useTransition();
   const on = c.id === activeId;
@@ -75,71 +110,113 @@ function CategoryRow({ c, activeId, onSelect, onToast }: { c: CategoryView; acti
 
   return (
     <div className="flex items-center gap-3 p-3 pr-32">
-      <button type="button" onClick={onSelect} className={cn("flex-1 rounded-lg px-3 py-2 text-left font-display font-semibold transition-colors", on ? "bg-sun-500 text-forest-900" : "text-forest-800 hover:bg-forest-100")}>
+      <button
+        type="button"
+        onClick={onSelect}
+        className={cn(
+          "flex-1 rounded-lg px-3 py-2 text-left font-display font-semibold transition-colors",
+          on ? "bg-sun-500 text-forest-900" : "text-forest-800 hover:bg-forest-100",
+        )}
+      >
         {c.name}
       </button>
       {renaming ? (
-        <RenameForm c={c} onDone={(s) => { onToast(s); if (s.success) setRenaming(false); }} onCancel={() => setRenaming(false)} />
+        <RenameForm
+          c={c}
+          onDone={(s) => {
+            onToast(s);
+            if (s.success) setRenaming(false);
+          }}
+          onCancel={() => setRenaming(false)}
+        />
       ) : (
         <>
-          <Button size="sm" variant="ghost" onClick={() => setRenaming(true)}>Renomear</Button>
-          <Button size="sm" variant="ghost" onClick={remove} loading={pending} className="text-[#9c2626]">Apagar</Button>
+          <Button size="sm" variant="ghost" onClick={() => setRenaming(true)}>
+            Renomear
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={remove}
+            loading={pending}
+            className="text-[#9c2626]"
+          >
+            Apagar
+          </Button>
         </>
       )}
     </div>
   );
 }
 
-function RenameForm({ c, onDone, onCancel }: { c: CategoryView; onDone: (s: FormState) => void; onCancel: () => void }) {
-  const [, action, pending] = useActionState(
-    async (_p: FormState, fd: FormData) => {
-      const r = await saveCategory(_p, fd);
-      onDone(r);
-      return r;
-    },
-    IDLE,
-  );
+function RenameForm({
+  c,
+  onDone,
+  onCancel,
+}: {
+  c: CategoryView;
+  onDone: (s: FormState) => void;
+  onCancel: () => void;
+}) {
+  const [, action, pending] = useActionState(async (_p: FormState, fd: FormData) => {
+    const r = await saveCategory(_p, fd);
+    onDone(r);
+    return r;
+  }, IDLE);
   return (
     <form action={action} className="flex items-center gap-2">
       <input type="hidden" name="id" value={c.id} />
-      <Input name="name" defaultValue={c.name} maxLength={40} required autoFocus className="max-w-[180px] py-1.5" />
-      <Button size="sm" type="submit" loading={pending}>OK</Button>
-      <Button size="sm" variant="ghost" type="button" onClick={onCancel}>Cancelar</Button>
+      <Input
+        name="name"
+        defaultValue={c.name}
+        maxLength={40}
+        required
+        autoFocus
+        className="max-w-[180px] py-1.5"
+      />
+      <Button size="sm" type="submit" loading={pending}>
+        OK
+      </Button>
+      <Button size="sm" variant="ghost" type="button" onClick={onCancel}>
+        Cancelar
+      </Button>
     </form>
   );
 }
 
 function NewCategoryForm({ onDone }: { onDone: (s: FormState) => void }) {
-  const [state, action, pending] = useActionState(
-    async (_p: FormState, fd: FormData) => {
-      const r = await saveCategory(_p, fd);
-      onDone(r);
-      return r;
-    },
-    IDLE,
-  );
+  const [state, action, pending] = useActionState(async (_p: FormState, fd: FormData) => {
+    const r = await saveCategory(_p, fd);
+    onDone(r);
+    return r;
+  }, IDLE);
   return (
     <form action={action} key={state.success ?? "x"} className="flex flex-wrap items-end gap-2">
       <Field label="Nova categoria" htmlFor="new-cat" className="flex-1">
         <Input id="new-cat" name="name" maxLength={40} placeholder="Ex.: Eventos" required />
       </Field>
-      <Button type="submit" variant="secondary" loading={pending}>+ Criar</Button>
+      <Button type="submit" variant="secondary" loading={pending}>
+        + Criar
+      </Button>
     </form>
   );
 }
 
-function UploadForm({ categoryId, onDone }: { categoryId: string; onDone: (s: FormState) => void }) {
+function UploadForm({
+  categoryId,
+  onDone,
+}: {
+  categoryId: string;
+  onDone: (s: FormState) => void;
+}) {
   const [previews, setPreviews] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
-  const [state, action, pending] = useActionState(
-    async (_p: FormState, fd: FormData) => {
-      const r = await addPhotos(_p, fd);
-      onDone(r);
-      if (r.success) setPreviews([]);
-      return r;
-    },
-    IDLE,
-  );
+  const [state, action, pending] = useActionState(async (_p: FormState, fd: FormData) => {
+    const r = await addPhotos(_p, fd);
+    onDone(r);
+    if (r.success) setPreviews([]);
+    return r;
+  }, IDLE);
 
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
@@ -150,9 +227,15 @@ function UploadForm({ categoryId, onDone }: { categoryId: string; onDone: (s: Fo
   };
 
   return (
-    <form action={action} key={state.success ?? "form"} className="grid gap-3 rounded-xl border border-dashed border-forest-500/40 bg-forest-100/40 p-4">
+    <form
+      action={action}
+      key={state.success ?? "form"}
+      className="grid gap-3 rounded-xl border border-dashed border-forest-500/40 bg-forest-100/40 p-4"
+    >
       <input type="hidden" name="category_id" value={categoryId} />
-      <label className="font-display text-sm font-semibold text-ink-2">Adicionar fotos (pode selecionar várias)</label>
+      <label className="font-display text-sm font-semibold text-ink-2">
+        Adicionar fotos (pode selecionar várias)
+      </label>
       <input
         name="images"
         type="file"
@@ -180,7 +263,15 @@ function UploadForm({ categoryId, onDone }: { categoryId: string; onDone: (s: Fo
   );
 }
 
-function PhotoCard({ p, categories, onToast }: { p: PhotoView; categories: CategoryView[]; onToast: (s: FormState) => void }) {
+function PhotoCard({
+  p,
+  categories,
+  onToast,
+}: {
+  p: PhotoView;
+  categories: CategoryView[];
+  onToast: (s: FormState) => void;
+}) {
   const [pending, start] = useTransition();
   const [alt, setAlt] = useState(p.alt);
 
@@ -199,7 +290,9 @@ function PhotoCard({ p, categories, onToast }: { p: PhotoView; categories: Categ
         <input
           value={alt}
           onChange={(e) => setAlt(e.target.value)}
-          onBlur={() => alt !== p.alt && start(async () => onToast(await updatePhoto(p.id, { alt })))}
+          onBlur={() =>
+            alt !== p.alt && start(async () => onToast(await updatePhoto(p.id, { alt })))
+          }
           placeholder="Legenda (opcional)"
           maxLength={120}
           aria-label="Legenda da foto"
@@ -208,15 +301,27 @@ function PhotoCard({ p, categories, onToast }: { p: PhotoView; categories: Categ
         <div className="flex items-center gap-2">
           <select
             value={p.category_id}
-            onChange={(e) => start(async () => onToast(await updatePhoto(p.id, { category_id: e.target.value })))}
+            onChange={(e) =>
+              start(async () => onToast(await updatePhoto(p.id, { category_id: e.target.value })))
+            }
             aria-label="Mover para categoria"
             className="flex-1 rounded-lg border border-forest-900/15 bg-white px-2 py-1.5 text-sm"
           >
             {categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
-          <Button size="sm" variant="ghost" onClick={remove} loading={pending} className="text-[#9c2626]">Remover</Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={remove}
+            loading={pending}
+            className="text-[#9c2626]"
+          >
+            Remover
+          </Button>
         </div>
       </div>
     </div>
