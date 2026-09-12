@@ -109,9 +109,11 @@ Senha: link "Esqueci minha senha" no login envia e-mail com link para
 - **Conteúdo**: `site_settings` (linha única), `features`, `gallery_categories`,
   `gallery_photos`, `food_items`. Caminhos de imagem começando com `/` apontam
   para `public/` (acervo inicial); os demais são objetos do bucket `site`.
-- **Atualização instantânea**: a home é estática com revalidação de 5 min, e
-  cada Server Action do painel chama `revalidatePath("/")`, então a próxima
-  visita já vê a mudança.
+- **Atualização instantânea**: a home é renderizada sob demanda (função na
+  região de São Paulo) lendo o conteúdo do Data Cache da Vercel (5 min). Cada
+  Server Action do painel chama `revalidateTag("site")`, então a visita
+  seguinte já vê a mudança. O build **não** consulta o Supabase — um soluço do
+  banco nunca derruba um deploy.
 - **Segurança em três camadas**: `src/proxy.ts` redireciona `/admin` sem
   sessão; toda Server Action chama `assertAdmin()`; e a RLS do banco exige
   `is_admin()` para qualquer escrita (leitura anônima só de linhas ativas).
