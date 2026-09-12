@@ -113,7 +113,7 @@ function FoodForm({ food, onDone }: { food?: FoodView; onDone: (s: FormState) =>
       </Field>
       <ImageField name="image" label="Foto do prato" current={food?.image} aspect="aspect-[4/3]" required={!food} />
       <div className="flex flex-wrap gap-4">
-        <Checkbox name="show_in_gallery" label='Mostrar também na galeria ("Comidas")' defaultChecked={food?.show_in_gallery ?? true} />
+        <Checkbox name="show_in_gallery" label="Mostrar na aba Comidas da galeria do site" defaultChecked={food?.show_in_gallery ?? true} />
         {food && <Checkbox name="is_active" label="Visível no site" defaultChecked={food.is_active} />}
       </div>
       {state.error && <p className="text-sm text-[#b93232]">{state.error}</p>}

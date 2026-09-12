@@ -17,7 +17,10 @@ export type PhotoView = { id: string; category_id: string; src: string; alt: str
 const IDLE: FormState = { error: null, success: null };
 const FOOD_SLUG = "comidas";
 
-export function GalleryManager({ categories, photos }: { categories: CategoryView[]; photos: PhotoView[] }) {
+export function GalleryManager({ categories: all, photos }: { categories: CategoryView[]; photos: PhotoView[] }) {
+  // A categoria "Comidas" não é gerida aqui: ela é alimentada automaticamente
+  // pelos pratos cadastrados na aba Comidas.
+  const categories = all.filter((c) => c.slug !== FOOD_SLUG);
   const [toast, setToast] = useState<FormState>(IDLE);
   const [active, setActive] = useState<string>(categories[0]?.id ?? "");
   const current = categories.find((c) => c.id === active) ?? categories[0];
@@ -26,7 +29,7 @@ export function GalleryManager({ categories, photos }: { categories: CategoryVie
   return (
     <div className="grid gap-6">
       <Card title="Categorias">
-        <p className="mb-4 text-sm text-ink-3">O visitante filtra a galeria por estas abas. Arraste para mudar a ordem. A categoria &ldquo;Comidas&rdquo; recebe automaticamente as fotos dos pratos.</p>
+        <p className="mb-4 text-sm text-ink-3">O visitante filtra a galeria por estas abas. Arraste para mudar a ordem. As fotos dos pratos cadastrados em <strong>Comidas</strong> entram sozinhas na aba &ldquo;Comidas&rdquo; da galeria do site — não precisa enviar aqui.</p>
         <Sortable
           items={categories}
           onReorder={reorderCategories}
@@ -41,11 +44,7 @@ export function GalleryManager({ categories, photos }: { categories: CategoryVie
         <Card title={`Fotos — ${current.name}`}>
           <UploadForm categoryId={current.id} onDone={setToast} />
           {currentPhotos.length === 0 ? (
-            <p className="mt-4 text-sm text-ink-3">
-              {current.slug === FOOD_SLUG
-                ? "Sem fotos avulsas. Os pratos cadastrados em Comidas já aparecem aqui no site."
-                : "Nenhuma foto nesta categoria ainda."}
-            </p>
+            <p className="mt-4 text-sm text-ink-3">Nenhuma foto nesta categoria ainda.</p>
           ) : (
             <Sortable
               key={current.id}
@@ -84,9 +83,7 @@ function CategoryRow({ c, activeId, onSelect, onToast }: { c: CategoryView; acti
       ) : (
         <>
           <Button size="sm" variant="ghost" onClick={() => setRenaming(true)}>Renomear</Button>
-          {c.slug !== FOOD_SLUG && (
-            <Button size="sm" variant="ghost" onClick={remove} loading={pending} className="text-[#9c2626]">Apagar</Button>
-          )}
+          <Button size="sm" variant="ghost" onClick={remove} loading={pending} className="text-[#9c2626]">Apagar</Button>
         </>
       )}
     </div>
