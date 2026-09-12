@@ -16,11 +16,14 @@ export function Hero({ s }: { s: SiteSettings }) {
           priority
           quality={85}
           sizes="100vw"
-          className="-z-20 object-cover object-[50%_42%] motion-safe:animate-[heroZoom_14s_ease-out_forwards] motion-safe:scale-[1.06]"
+          className="-z-20 object-cover object-[50%_55%] saturate-[1.15] contrast-[1.05] motion-safe:animate-[heroZoom_14s_ease-out_forwards] motion-safe:scale-[1.06]"
         />
       )}
+      {/* Tratamento "natureza": tinta verde-floresta multiplicada sobre a foto,
+          luz quente vinda de cima à direita e vinheta escura nas bordas. */}
+      <div className="absolute inset-0 -z-10 bg-forest-700/35 mix-blend-multiply" aria-hidden />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(8,47,34,.55)_0%,rgba(8,47,34,.25)_35%,rgba(8,47,34,.66)_100%),linear-gradient(90deg,rgba(8,47,34,.6)_0%,rgba(8,47,34,.05)_70%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_78%_8%,rgba(247,181,0,.28),transparent_70%),radial-gradient(120%_90%_at_50%_50%,transparent_45%,rgba(4,24,15,.75)_100%),linear-gradient(180deg,rgba(8,47,34,.45)_0%,rgba(8,47,34,.15)_40%,rgba(8,47,34,.7)_100%),linear-gradient(90deg,rgba(8,47,34,.6)_0%,rgba(8,47,34,.05)_65%)]"
         aria-hidden
       />
 
