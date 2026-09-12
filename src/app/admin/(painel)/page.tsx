@@ -12,9 +12,6 @@ import {
   getSettingsRow,
 } from "@/server/repositories/admin";
 
-/** Número usado na prévia; enquanto estiver no ar, o dono não recebe as reservas. */
-const TEST_WHATSAPP = "5592991901596";
-
 const LINKS = [
   {
     href: "/admin/geral",
@@ -51,55 +48,13 @@ export default async function AdminHome() {
   ]);
   const base = getSupabaseUrl();
 
-  const seedImages = [
-    s.hero_image_path,
-    s.about_image_path,
-    s.about_image_secondary_path,
-    s.cta_image_path,
-    s.logo_path,
-  ].filter((p) => p?.startsWith("/seed/")).length;
-  const seedGallery = gallery.photos.filter((p) => p.src.startsWith("/seed/")).length;
-  const seedFoods = foods.filter((f) => f.image?.startsWith("/seed/")).length;
-
+  const holidaysOk = (s.extra_holidays ?? "").trim() !== "" || s.charge_mode !== "sundays_holidays";
   const todos: Todo[] = [
     {
-      ok: s.whatsapp_number !== TEST_WHATSAPP,
-      text:
-        s.whatsapp_number === TEST_WHATSAPP
-          ? "O WhatsApp ainda é o número de teste da prévia — troque pelo oficial."
-          : "WhatsApp oficial configurado.",
-      href: "/admin/whatsapp-preco",
-    },
-    {
-      ok: seedImages === 0,
-      text:
-        seedImages === 0
-          ? "Fotos de destaque são do balneário (enviadas pelo painel)."
-          : `${seedImages} foto(s) de destaque ainda são as da prévia (recortes do Instagram, em baixa resolução).`,
-      href: "/admin/geral",
-    },
-    {
-      ok: seedGallery === 0,
-      text:
-        seedGallery === 0
-          ? "Galeria com fotos enviadas pelo painel."
-          : `${seedGallery} foto(s) da galeria ainda são as da prévia.`,
-      href: "/admin/galeria",
-    },
-    {
-      ok: foods.length > 1 || seedFoods === 0,
-      text:
-        foods.length > 1
-          ? `${foods.length} pratos cadastrados.`
-          : "Cadastre os pratos do restaurante (hoje só existe o exemplo da prévia).",
-      href: "/admin/comidas",
-    },
-    {
-      ok: (s.extra_holidays ?? "").trim() !== "" || s.charge_mode !== "sundays_holidays",
-      text:
-        (s.extra_holidays ?? "").trim() !== ""
-          ? "Feriados estaduais/municipais cadastrados."
-          : "Cadastre os feriados do Amazonas e de Novo Airão (os nacionais já são automáticos).",
+      ok: holidaysOk,
+      text: holidaysOk
+        ? "Feriados do Amazonas e de Novo Airão cadastrados."
+        : "Cadastre os feriados do Amazonas e de Novo Airão (os nacionais já são automáticos).",
       href: "/admin/whatsapp-preco",
     },
   ];
