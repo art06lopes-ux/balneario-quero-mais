@@ -10,16 +10,6 @@ import { SectionTitle } from "@/components/site/SectionTitle";
 import { InViewGroup } from "@/components/site/motion";
 import type { Feature } from "@/lib/types";
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
 /**
  * Cards da estrutura. No mobile vira carrossel com swipe; no desktop os
  * quatro cabem lado a lado (mas continua arrastável com o mouse).
@@ -64,13 +54,13 @@ export function Features({ items }: { items: Feature[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12"
         >
-          {items.map((f) => (
+          {items.map((f, i) => (
             <SwiperSlide key={f.id} className="!h-auto">
               <motion.article
-                variants={cardVariants}
+                style={{ "--d": `${Math.min(i, 4) * 0.1}s` } as React.CSSProperties}
                 whileTap={{ scale: 0.97 }}
                 whileHover={{ y: -8 }}
-                className="group relative isolate aspect-[3/4] overflow-hidden rounded-xl2 bg-forest-900 text-white shadow-card"
+                className="card-reveal group relative isolate aspect-[3/4] overflow-hidden rounded-xl2 bg-forest-900 text-white shadow-card"
               >
                 {f.image && (
                   <Image

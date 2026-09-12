@@ -334,39 +334,38 @@ export function ScrollProgress() {
   );
 }
 
-/* ---------- InViewGroup: container com stagger e fallback por rolagem ---------- */
+/* ---------- InViewGroup: marca o bloco quando entra na tela ---------- */
 
 /**
- * Como `whileInView`, mas com uma rede de segurança: além do
- * IntersectionObserver, confere a posição do bloco a cada rolagem. Se por
- * qualquer motivo o observador não disparar (abas em segundo plano, WebViews
- * antigas), os filhos ainda aparecem quando o bloco entra na tela.
+ * Coloca `data-in` no container quando ele aparece (IntersectionObserver +
+ * conferência por rolagem como rede de segurança). Os filhos com a classe
+ * `card-reveal` animam por CSS — sem depender de requestAnimationFrame.
  */
-export function InViewGroup({
-  children,
-  className,
-  gap = 0.1,
-}: {
-  children: ReactNode;
-  className?: string;
-  gap?: number;
-}) {
+export function InViewGroup({ children, className }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
     if (shown) return;
+    const el = ref.current;
+    if (!el) return;
     const check = () => {
-      const el = ref.current;
-      if (!el) return;
       const r = el.getBoundingClientRect();
       if (r.top < window.innerHeight * 0.95 && r.bottom > 0) setShown(true);
     };
+    const io =
+      "IntersectionObserver" in window
+        ? new IntersectionObserver(
+            (entries) => entries.some((e) => e.isIntersecting) && setShown(true),
+            { threshold: 0.05 },
+          )
+        : null;
+    io?.observe(el);
     const t = window.setTimeout(check, 300);
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
     return () => {
+      io?.disconnect();
       window.clearTimeout(t);
       window.removeEventListener("scroll", check);
       window.removeEventListener("resize", check);
@@ -374,17 +373,8 @@ export function InViewGroup({
   }, [shown]);
 
   return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={reduce ? "show" : "hidden"}
-      animate={shown ? "show" : undefined}
-      whileInView="show"
-      viewport={{ once: true, amount: 0.05 }}
-      onViewportEnter={() => setShown(true)}
-      transition={{ staggerChildren: gap }}
-    >
+    <div ref={ref} className={className} data-in={shown ? "" : undefined}>
       {children}
-    </motion.div>
+    </div>
   );
 }

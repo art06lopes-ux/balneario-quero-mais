@@ -14,16 +14,6 @@ import { InViewGroup } from "@/components/site/motion";
 import { formatBRL } from "@/lib/format";
 import type { FoodItem } from "@/lib/types";
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
 /** Seção de comidas: carrossel com swipe, setas no desktop, toque para ampliar. */
 export function Foods({ items }: { items: FoodItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -89,15 +79,15 @@ export function Foods({ items }: { items: FoodItem[] }) {
           }}
           className="!mx-auto !w-[min(1180px,100%-2.5rem)] !overflow-visible !pb-12 max-md:[&_.swiper-button-next]:!hidden max-md:[&_.swiper-button-prev]:!hidden [&_.swiper-button-next]:!-right-2 [&_.swiper-button-next]:!top-[38%] [&_.swiper-button-next]:!size-12 [&_.swiper-button-next]:!rounded-full [&_.swiper-button-next]:!bg-sun-500 [&_.swiper-button-next]:!shadow-sun [&_.swiper-button-next]:after:!text-base [&_.swiper-button-next]:after:!font-black [&_.swiper-button-prev]:!-left-2 [&_.swiper-button-prev]:!top-[38%] [&_.swiper-button-prev]:!size-12 [&_.swiper-button-prev]:!rounded-full [&_.swiper-button-prev]:!bg-sun-500 [&_.swiper-button-prev]:!shadow-sun [&_.swiper-button-prev]:after:!text-base [&_.swiper-button-prev]:after:!font-black"
         >
-          {items.map((f) => {
+          {items.map((f, i) => {
             const photoIndex = withPhoto.findIndex((w) => w.id === f.id);
             return (
               <SwiperSlide key={f.id} className="!h-auto">
                 <motion.article
-                  variants={cardVariants}
+                  style={{ "--d": `${Math.min(i, 4) * 0.1}s` } as React.CSSProperties}
                   whileTap={{ scale: 0.97 }}
                   whileHover={{ y: -8 }}
-                  className="flex h-full flex-col overflow-hidden rounded-xl2 bg-white text-ink shadow-deep"
+                  className="card-reveal flex h-full flex-col overflow-hidden rounded-xl2 bg-white text-ink shadow-deep"
                 >
                   <button
                     type="button"
