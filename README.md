@@ -17,7 +17,8 @@ só como referência; não é usada pelo app.
 
 1. Crie um projeto em <https://supabase.com> (plano gratuito serve). Região
    recomendada: São Paulo (`sa-east-1`).
-2. No **SQL Editor** do projeto, rode, nesta ordem, o conteúdo de:
+2. No **SQL Editor** do projeto, cole e execute `supabase/setup-completo.sql`
+   (um arquivo só). Ele equivale a rodar, nesta ordem:
    - `supabase/migrations/0001_schema.sql` — tabelas
    - `supabase/migrations/0002_rls.sql` — segurança (RLS) e função `is_admin()`
    - `supabase/migrations/0003_storage.sql` — bucket `site` de fotos
