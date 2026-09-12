@@ -20,7 +20,7 @@
   --color-sand-2: #f3ecdd;
   --color-ink: #12261c;
   --color-ink-2: #3c5247;
-  --color-ink-3: #6b7f75;
+  --color-ink-3: #5c7168;
 
   --font-display: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
@@ -51,6 +51,11 @@ body {
 }
 
 /* Botões reutilizáveis (site público) */
+button,
+[role="button"],
+a[href] {
+  cursor: pointer;
+}
 .btn {
   @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-transparent px-6 py-3.5 font-display text-[0.95rem] font-bold whitespace-nowrap transition-[transform,box-shadow,background-color,color] duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sun-500/40;
 }

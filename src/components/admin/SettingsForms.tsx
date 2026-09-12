@@ -67,6 +67,24 @@ export function GeneralForm({ row, urls }: { row: SettingsRow; urls: Urls }) {
         </div>
       </Card>
 
+      <Card title="Prova social">
+        <p className="mb-4 text-sm text-ink-3">Aparece no topo do site e na chamada final. Deixe vazio para esconder. Atualize de tempos em tempos com o que o Google e o Instagram mostram.</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Nota no Google (0 a 5)" htmlFor="google_rating">
+            <Input id="google_rating" name="google_rating" inputMode="decimal" defaultValue={row.google_rating ?? ""} placeholder="4,7" />
+          </Field>
+          <Field label="Quantidade de avaliações" htmlFor="google_rating_count">
+            <Input id="google_rating_count" name="google_rating_count" inputMode="numeric" defaultValue={row.google_rating_count ?? ""} placeholder="54" />
+          </Field>
+          <Field label="Link das avaliações no Google" htmlFor="google_reviews_url" className="sm:col-span-2">
+            <Input id="google_reviews_url" name="google_reviews_url" type="url" defaultValue={row.google_reviews_url ?? ""} />
+          </Field>
+          <Field label="Seguidores no Instagram (texto livre)" htmlFor="instagram_followers">
+            <Input id="instagram_followers" name="instagram_followers" defaultValue={row.instagram_followers ?? ""} placeholder="7,9 mil" maxLength={40} />
+          </Field>
+        </div>
+      </Card>
+
       <div className="sticky bottom-4 flex justify-end">
         <Button type="submit" size="lg" loading={pending} className="shadow-deep">
           Salvar alterações

@@ -13,12 +13,28 @@ const NAV = [
   ["#galeria", "Galeria"],
   ["#comidas", "Comidas"],
   ["#reservar", "Reservar"],
+  ["#perguntas", "Dúvidas"],
   ["#localizacao", "Localização"],
 ] as const;
 
 export function Header({ logo }: { logo: string | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string>("#inicio");
+
+  // Scroll spy: destaca no menu a seção que ocupa o meio da tela.
+  useEffect(() => {
+    const ids = NAV.map(([h]) => h.slice(1));
+    const els = ids.map((id) => document.getElementById(id)).filter((e): e is HTMLElement => e !== null);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(`#${e.target.id}`);
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -37,6 +53,13 @@ export function Header({ logo }: { logo: string | null }) {
   const dark = scrolled || open;
 
   return (
+    <>
+    <a
+      href="#conteudo"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-sun-500 focus:px-4 focus:py-2 focus:font-display focus:font-bold focus:text-forest-900"
+    >
+      Pular para o conteúdo
+    </a>
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 h-[76px] transition-[background-color,box-shadow,backdrop-filter] duration-300",
@@ -55,19 +78,28 @@ export function Header({ logo }: { logo: string | null }) {
 
         {/* Desktop */}
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Navegação principal">
-          {NAV.map(([href, label]) => (
-            <a
-              key={href}
-              href={href}
-              className={cn(
-                "group relative font-display text-[0.95rem] font-semibold transition-colors",
-                scrolled ? "text-forest-800" : "text-white [text-shadow:0_1px_6px_rgba(0,0,0,.35)]",
-              )}
-            >
-              {label}
-              <span className="absolute -bottom-1.5 left-0 h-0.5 w-full origin-left scale-x-0 bg-sun-500 transition-transform duration-250 group-hover:scale-x-100" />
-            </a>
-          ))}
+          {NAV.map(([href, label]) => {
+            const on = active === href;
+            return (
+              <a
+                key={href}
+                href={href}
+                aria-current={on ? "true" : undefined}
+                className={cn(
+                  "group relative rounded-md font-display text-[0.95rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sun-500",
+                  scrolled ? "text-forest-800" : "text-white [text-shadow:0_1px_6px_rgba(0,0,0,.35)]",
+                )}
+              >
+                {label}
+                <span
+                  className={cn(
+                    "absolute -bottom-1.5 left-0 h-0.5 w-full origin-left bg-sun-500 transition-transform duration-300",
+                    on ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                  )}
+                />
+              </a>
+            );
+          })}
           <a href="#reservar" className="btn btn-sun ml-1">
             Reservar Entrada
           </a>
@@ -136,5 +168,6 @@ export function Header({ logo }: { logo: string | null }) {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }

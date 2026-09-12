@@ -23,6 +23,7 @@ só como referência; não é usada pelo app.
    - `supabase/migrations/0002_rls.sql` — segurança (RLS) e função `is_admin()`
    - `supabase/migrations/0003_storage.sql` — bucket `site` de fotos
    - `supabase/migrations/0004_cobranca_por_dia.sql` — cobrança só em domingos/feriados
+   - `supabase/migrations/0005_prova_social.sql` — nota do Google e seguidores (editáveis)
    - `supabase/seed.sql` — conteúdo inicial (textos e fotos da prévia)
 3. Em **Authentication → Providers → Email**, deixe *Confirm email* desligado
    (o admin é criado por script, já confirmado) e **desative o cadastro
@@ -85,7 +86,7 @@ Outros comandos: `npm run build`, `npm run start`, `npm run lint`,
 | Seção | Controla |
 | --- | --- |
 | **Início** | Resumo e atalhos. |
-| **Textos e imagens** | Hero (linha pequena, título, frase, foto de fundo), Sobre (título, texto, duas fotos), chamada final (frase, apoio, foto), **logo** e link do Instagram. |
+| **Textos e imagens** | Hero (linha pequena, título, frase, foto de fundo), Sobre (título, texto, duas fotos), chamada final (frase, apoio, foto), **logo**, link do Instagram e **prova social** (nota do Google, nº de avaliações, seguidores). |
 | **WhatsApp e preço** | O número que recebe as reservas (usado em todos os botões, no flutuante e na localização), o valor da entrada e **quando ela é cobrada** (todos os dias, ou só domingos e feriados). Feriados nacionais são automáticos; os estaduais/municipais o dono lista ali. |
 | **Atrações** | Cards de "O que você encontra por aqui": título, descrição, foto, visível/oculto, ordem. |
 | **Galeria** | Categorias (criar, renomear, apagar, reordenar), envio de várias fotos de uma vez, legenda, mover de categoria, ordem. A categoria **Comidas** é fixa e recebe automaticamente as fotos dos pratos. |

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { Logo3D } from "@/components/site/Logo3D";
 import { Magnetic, SplitWords } from "@/components/site/motion";
+import { TrustBadges } from "@/components/site/TrustBadges";
 import { formatBRL } from "@/lib/format";
 import { defaultPricingNote, priceUnitLabel } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/types";
@@ -154,6 +155,8 @@ export function Hero({ s }: { s: SiteSettings }) {
               </motion.li>
             ))}
           </motion.ul>
+
+          <TrustBadges s={s} className="mt-6" delay={1.3} />
         </div>
 
         {s.logo && (

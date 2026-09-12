@@ -18,7 +18,9 @@ export function Features({ items }: { items: Feature[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section id="atracoes" className="overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
+    <section id="atracoes" className="relative overflow-hidden bg-gradient-to-b from-sand to-sand-2 py-[clamp(4rem,9vw,7.5rem)]">
+      <div className="pointer-events-none absolute -left-32 top-24 size-[460px] rounded-full bg-forest-500/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -right-24 bottom-0 size-[380px] rounded-full bg-river-500/10 blur-3xl" aria-hidden />
       <div className="mx-auto w-[min(1180px,100%-2.5rem)]">
         <SectionTitle index="02" eyebrow="Atrações" title="O que você encontra por aqui" className="mb-[clamp(2rem,5vw,3.5rem)]" />
       </div>

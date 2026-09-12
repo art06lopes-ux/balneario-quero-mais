@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { Magnetic, SplitWords } from "@/components/site/motion";
 import { Reveal } from "@/components/site/Reveal";
+import { TrustBadges } from "@/components/site/TrustBadges";
 import type { SiteSettings } from "@/lib/types";
 
 export function FinalCTA({ s }: { s: SiteSettings }) {
@@ -42,6 +43,7 @@ export function FinalCTA({ s }: { s: SiteSettings }) {
             </a>
           </Magnetic>
         </Reveal>
+        <TrustBadges s={s} className="mt-8 justify-center" delay={0.5} />
       </div>
     </section>
   );

@@ -10,6 +10,9 @@ import { Gallery } from "@/components/site/Gallery";
 import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 import { Location } from "@/components/site/Location";
+import { FAQ } from "@/components/site/FAQ";
+import { buildFaq } from "@/lib/faq";
+import { MobileCTA } from "@/components/site/MobileCTA";
 import { Marquee, ScrollProgress } from "@/components/site/motion";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { getSiteUrl } from "@/lib/env";
@@ -57,6 +60,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const { settings, features, gallery, foods } = await getSiteContent();
 
+  const faq = buildFaq(settings);
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TouristAttraction",
@@ -72,10 +82,11 @@ export default async function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <SmoothScroll>
       <ScrollProgress />
       <Header logo={settings.logo} />
-      <main>
+      <main id="conteudo">
         <Hero s={settings} />
         <Marquee
           items={["Igarapé de água escura", "Redário dentro d\u2019água", "Bar & restaurante", "Aberto todos os dias", "Km 19 · Estrada de Novo Airão", "Peixe grelhado"]}
@@ -92,11 +103,13 @@ export default async function HomePage() {
           extraHolidays={settings.extraHolidays}
           pricingNote={settings.pricingNote}
         />
+        <FAQ items={faq} />
         <FinalCTA s={settings} />
         <Location s={settings} />
       </main>
       <Footer s={settings} />
       <FloatingWhatsApp number={settings.whatsappNumber} />
+      <MobileCTA price={settings.ticketPrice} chargeMode={settings.chargeMode} />
       </SmoothScroll>
     </>
   );

@@ -30,6 +30,10 @@ export type SettingsRow = {
   maps_query: string;
   logo_path: string | null;
   instagram_url: string;
+  google_rating: number | string | null;
+  google_rating_count: number | null;
+  google_reviews_url: string;
+  instagram_followers: string;
 };
 
 export type FeatureRow = {
@@ -95,6 +99,10 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
     mapsQuery: row.maps_query,
     logo: imageUrl(row.logo_path, base),
     instagramUrl: row.instagram_url,
+    googleRating: num(row.google_rating),
+    googleRatingCount: row.google_rating_count ?? null,
+    googleReviewsUrl: row.google_reviews_url ?? "",
+    instagramFollowers: row.instagram_followers ?? "",
   };
 }
 

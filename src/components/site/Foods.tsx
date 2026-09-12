@@ -29,6 +29,9 @@ export function Foods({ items }: { items: FoodItem[] }) {
       id="comidas"
       className="relative overflow-hidden bg-forest-900 py-[clamp(4rem,9vw,7.5rem)] text-white [--swiper-navigation-color:#082f22]"
     >
+      <svg className="absolute inset-x-0 top-0 h-[40px] w-full text-sand sm:h-[70px]" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden>
+        <path fill="currentColor" d="M0,0 L1440,0 L1440,25 C1200,70 960,70 720,35 C480,0 240,0 0,35 Z" />
+      </svg>
       <div className="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full bg-sun-500/15 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute -bottom-40 -left-40 size-[520px] rounded-full bg-river-500/20 blur-3xl" aria-hidden />
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionTitle } from "@/components/site/SectionTitle";
 import { formatBRL, isoToBR, maskPhone, todayISO } from "@/lib/format";
@@ -29,6 +29,17 @@ export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
+  // Datas dependem do relógio do visitante (fuso de Manaus), não do servidor:
+  // calculadas só no cliente para não divergir da renderização inicial.
+  const [quick, setQuick] = useState<{ label: string; iso: string }[]>([]);
+  const [minDate, setMinDate] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      setQuick(quickDates());
+      setMinDate(todayISO());
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, []);
 
   // Cobra só se a data escolhida for de cobrança (domingo/feriado, conforme o painel).
   const charged = isChargedDate(date, chargeMode, extraHolidays);
@@ -126,7 +137,22 @@ export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays
 
               <div className="grid gap-1.5">
                 <label htmlFor="date" className="font-display text-sm font-semibold text-ink-2">Data desejada</label>
-                <input id="date" type="date" min={todayISO()} value={date} onChange={(e) => setDate(e.target.value)} className={inputCls(invalid.date)} />
+                <input id="date" type="date" min={minDate} value={date} onChange={(e) => setDate(e.target.value)} className={inputCls(invalid.date)} />
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {quick.map((d) => (
+                    <button
+                      key={d.iso}
+                      type="button"
+                      onClick={() => setDate(d.iso)}
+                      className={cn(
+                        "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                        date === d.iso ? "border-forest-700 bg-forest-700 text-white" : "border-forest-900/15 bg-white text-forest-800 hover:bg-forest-100",
+                      )}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="grid gap-1.5">
@@ -171,4 +197,27 @@ export function Booking({ whatsappNumber, ticketPrice, chargeMode, extraHolidays
       </div>
     </section>
   );
+}
+
+/** Atalhos: hoje, amanhã, próximo sábado e próximo domingo. */
+function quickDates(): { label: string; iso: string }[] {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const iso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const today = new Date();
+  const next = (dow: number) => {
+    const d = new Date(today);
+    const diff = (dow - d.getDay() + 7) % 7 || 7;
+    d.setDate(d.getDate() + diff);
+    return d;
+  };
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const out = [
+    { label: "Hoje", iso: iso(today) },
+    { label: "Amanhã", iso: iso(tomorrow) },
+    { label: "Próx. sábado", iso: iso(next(6)) },
+    { label: "Próx. domingo", iso: iso(next(0)) },
+  ];
+  // Evita repetir quando "amanhã" já é sábado/domingo.
+  return out.filter((d, i, arr) => arr.findIndex((x) => x.iso === d.iso) === i);
 }

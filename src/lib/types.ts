@@ -25,6 +25,10 @@ export type SiteSettings = {
   mapsQuery: string;
   logo: string | null;
   instagramUrl: string;
+  googleRating: number | null;
+  googleRatingCount: number | null;
+  googleReviewsUrl: string;
+  instagramFollowers: string;
 };
 
 export type Feature = {

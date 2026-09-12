@@ -16,7 +16,7 @@ export function Location({ s }: { s: SiteSettings }) {
     <section id="localizacao" className="py-[clamp(4rem,9vw,7.5rem)]">
       <div className="mx-auto grid w-[min(1180px,100%-2.5rem)] items-start gap-[clamp(2rem,5vw,4rem)] md:grid-cols-[1fr_1.3fr]">
         <div>
-          <SectionTitle index="06" eyebrow="Localização" title="Como chegar" className="mb-4" />
+          <SectionTitle index="07" eyebrow="Localização" title="Como chegar" className="mb-4" />
 
           <Reveal delay={0.1}>
             <Info

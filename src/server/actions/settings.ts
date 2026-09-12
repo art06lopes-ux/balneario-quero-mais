@@ -60,6 +60,10 @@ const generalSchema = z.object({
   cta_title: z.string().max(120),
   cta_text: z.string().max(300),
   instagram_url: z.string().max(200),
+  google_rating: z.number().min(0).max(5).nullable(),
+  google_rating_count: z.number().int().min(0).nullable(),
+  google_reviews_url: z.string().max(300),
+  instagram_followers: z.string().max(40),
 });
 
 export async function updateGeneral(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -74,6 +78,10 @@ export async function updateGeneral(_prev: FormState, formData: FormData): Promi
       cta_title: str(formData, "cta_title"),
       cta_text: str(formData, "cta_text"),
       instagram_url: str(formData, "instagram_url"),
+      google_rating: str(formData, "google_rating") === "" ? null : Number(str(formData, "google_rating").replace(",", ".")),
+      google_rating_count: str(formData, "google_rating_count") === "" ? null : Number(str(formData, "google_rating_count")),
+      google_reviews_url: str(formData, "google_reviews_url"),
+      instagram_followers: str(formData, "instagram_followers"),
     });
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Dados inválidos.", success: null };
 

@@ -302,7 +302,7 @@ export function Marquee({
       aria-label={items.join(", ")}
     >
       <div
-        className="inline-flex w-max items-center motion-safe:animate-[marquee_linear_infinite]"
+        className="inline-flex w-max items-center motion-safe:animate-[marquee_linear_infinite] hover:[animation-play-state:paused]"
         style={{ animationDuration: reduce ? undefined : `${speed}s` }}
         aria-hidden
       >
