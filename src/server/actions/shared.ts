@@ -1,6 +1,7 @@
 import "server-only";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { SITE_CACHE_TAG } from "@/server/repositories/content";
 
 export type FormState = { error: string | null; success: string | null };
 
@@ -12,6 +13,8 @@ export const IDLE: FormState = { error: null, success: null };
  * sem redeploy, sem esperar o intervalo.
  */
 export function revalidateSite(adminPath?: string): void {
+  // Some o cache de dados na hora (expire: 0) e a página em seguida.
+  revalidateTag(SITE_CACHE_TAG, { expire: 0 });
   revalidatePath("/");
   if (adminPath) revalidatePath(adminPath);
 }

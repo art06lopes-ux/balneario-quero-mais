@@ -19,14 +19,14 @@ import { getSiteUrl } from "@/lib/env";
 import { formatBRL } from "@/lib/format";
 import { priceUnitLabel } from "@/lib/pricing";
 import { BUSINESS_NAME } from "@/lib/types";
-import { getSiteContent } from "@/server/repositories/content";
+import { getCachedSiteContent } from "@/server/repositories/content";
 
 /**
- * Estático com revalidação: o painel chama revalidatePath("/") a cada
- * mudança, então o site reflete na hora. O intervalo abaixo é só uma
- * rede de segurança.
+ * Renderizada sob demanda, com os dados vindos do cache (ver
+ * getCachedSiteContent). O painel invalida a tag "site" ao salvar, então
+ * a mudança aparece na visita seguinte; nada é buscado no build.
  */
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 function absolute(url: string | null): string | undefined {
   if (!url) return undefined;
@@ -34,7 +34,7 @@ function absolute(url: string | null): string | undefined {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { settings: s } = await getSiteContent();
+  const { settings: s } = await getCachedSiteContent();
   const title = `${BUSINESS_NAME} — ${s.address}`;
   const description = `${s.heroSubtitle} Entrada ${formatBRL(s.ticketPrice)} ${priceUnitLabel(s.chargeMode)}. ${s.hours}.`;
   const image = absolute(s.heroImage);
@@ -58,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { settings, features, gallery, foods } = await getSiteContent();
+  const { settings, features, gallery, foods } = await getCachedSiteContent();
 
   const faq = buildFaq(settings);
   const faqLd = {

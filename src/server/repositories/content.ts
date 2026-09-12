@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import { getSupabaseUrl } from "@/lib/env";
 import { imageUrl } from "@/lib/storage";
 import type { Feature, FoodItem, GalleryCategory, SiteContent, SiteSettings } from "@/lib/types";
@@ -106,6 +107,21 @@ export function mapSettings(row: SettingsRow, base: string): SiteSettings {
     instagramFollowers: row.instagram_followers ?? "",
   };
 }
+
+export const SITE_CACHE_TAG = "site";
+
+/**
+ * Conteúdo do site guardado no cache de dados (Vercel Data Cache).
+ *
+ * A home é renderizada sob demanda, mas o banco só é consultado quando o
+ * cache expira (5 min) ou quando o painel salva algo e invalida a tag —
+ * assim o deploy não depende do Supabase responder durante o build, e o
+ * visitante recebe a página em milissegundos.
+ */
+export const getCachedSiteContent = unstable_cache(() => getSiteContent(), ["site-content"], {
+  tags: [SITE_CACHE_TAG],
+  revalidate: 300,
+});
 
 /**
  * Conteúdo completo do site público, com URLs resolvidas.
