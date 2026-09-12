@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Lightbox } from "@/components/site/Lightbox";
 import { SectionTitle } from "@/components/site/SectionTitle";
+import { InViewGroup } from "@/components/site/motion";
 import { formatBRL } from "@/lib/format";
 import type { FoodItem } from "@/lib/types";
 
@@ -73,12 +74,7 @@ export function Foods({ items }: { items: FoodItem[] }) {
         />
       </div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.05 }}
-        transition={{ staggerChildren: 0.1 }}
-      >
+      <InViewGroup>
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           slidesPerView={1.15}
@@ -140,7 +136,7 @@ export function Foods({ items }: { items: FoodItem[] }) {
             );
           })}
         </Swiper>
-      </motion.div>
+      </InViewGroup>
 
       <Lightbox photos={photos} index={open} onClose={close} />
     </section>

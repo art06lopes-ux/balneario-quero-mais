@@ -333,3 +333,58 @@ export function ScrollProgress() {
     />
   );
 }
+
+/* ---------- InViewGroup: container com stagger e fallback por rolagem ---------- */
+
+/**
+ * Como `whileInView`, mas com uma rede de segurança: além do
+ * IntersectionObserver, confere a posição do bloco a cada rolagem. Se por
+ * qualquer motivo o observador não disparar (abas em segundo plano, WebViews
+ * antigas), os filhos ainda aparecem quando o bloco entra na tela.
+ */
+export function InViewGroup({
+  children,
+  className,
+  gap = 0.1,
+}: {
+  children: ReactNode;
+  className?: string;
+  gap?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    if (shown) return;
+    const check = () => {
+      const el = ref.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.95 && r.bottom > 0) setShown(true);
+    };
+    const t = window.setTimeout(check, 300);
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [shown]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={reduce ? "show" : "hidden"}
+      animate={shown ? "show" : undefined}
+      whileInView="show"
+      viewport={{ once: true, amount: 0.05 }}
+      onViewportEnter={() => setShown(true)}
+      transition={{ staggerChildren: gap }}
+    >
+      {children}
+    </motion.div>
+  );
+}

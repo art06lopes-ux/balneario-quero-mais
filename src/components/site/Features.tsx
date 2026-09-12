@@ -7,6 +7,7 @@ import { A11y, FreeMode, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { SectionTitle } from "@/components/site/SectionTitle";
+import { InViewGroup } from "@/components/site/motion";
 import type { Feature } from "@/lib/types";
 
 const cardVariants = {
@@ -48,12 +49,7 @@ export function Features({ items }: { items: Feature[] }) {
         />
       </div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.05 }}
-        transition={{ staggerChildren: 0.1 }}
-      >
+      <InViewGroup>
         <Swiper
           modules={[Pagination, A11y, FreeMode]}
           slidesPerView={1.15}
@@ -94,7 +90,7 @@ export function Features({ items }: { items: Feature[] }) {
             </SwiperSlide>
           ))}
         </Swiper>
-      </motion.div>
+      </InViewGroup>
     </section>
   );
 }
