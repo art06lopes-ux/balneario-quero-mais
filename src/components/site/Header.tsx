@@ -6,18 +6,9 @@ import { useEffect, useState } from "react";
 import { Logo3D } from "@/components/site/Logo3D";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  ["#inicio", "Início"],
-  ["#sobre", "Sobre"],
-  ["#atracoes", "Atrações"],
-  ["#galeria", "Galeria"],
-  ["#comidas", "Comidas"],
-  ["#reservar", "Reservar"],
-  ["#perguntas", "Dúvidas"],
-  ["#localizacao", "Localização"],
-] as const;
+export type NavItem = readonly [href: string, label: string];
 
-export function Header({ logo }: { logo: string | null }) {
+export function Header({ logo, nav: NAV }: { logo: string | null; nav: readonly NavItem[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("#inicio");
@@ -34,7 +25,7 @@ export function Header({ logo }: { logo: string | null }) {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [NAV]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

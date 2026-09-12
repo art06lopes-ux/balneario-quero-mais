@@ -7,7 +7,7 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { Foods } from "@/components/site/Foods";
 import { Footer } from "@/components/site/Footer";
 import { Gallery } from "@/components/site/Gallery";
-import { Header } from "@/components/site/Header";
+import { Header, type NavItem } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 import { Location } from "@/components/site/Location";
 import { FAQ } from "@/components/site/FAQ";
@@ -51,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/",
-      images: image ? [{ url: image, width: 1200, height: 630, alt: BUSINESS_NAME }] : [],
+      images: image ? [{ url: image, alt: BUSINESS_NAME }] : [],
     },
     twitter: { card: "summary_large_image", title, description, images: image ? [image] : [] },
   };
@@ -66,6 +66,13 @@ export default async function HomePage() {
     "@type": "FAQPage",
     mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
+
+  // Só entram no menu as seções que realmente existem com o conteúdo atual.
+  const nav: NavItem[] = [["#inicio", "Início"], ["#sobre", "Sobre"]];
+  if (features.length > 0) nav.push(["#atracoes", "Atrações"]);
+  if (gallery.length > 0) nav.push(["#galeria", "Galeria"]);
+  if (foods.length > 0) nav.push(["#comidas", "Comidas"]);
+  nav.push(["#reservar", "Reservar"], ["#perguntas", "Dúvidas"], ["#localizacao", "Localização"]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -85,7 +92,7 @@ export default async function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <SmoothScroll>
       <ScrollProgress />
-      <Header logo={settings.logo} />
+      <Header logo={settings.logo} nav={nav} />
       <main id="conteudo">
         <Hero s={settings} />
         <Marquee
@@ -107,7 +114,7 @@ export default async function HomePage() {
         <FinalCTA s={settings} />
         <Location s={settings} />
       </main>
-      <Footer s={settings} />
+      <Footer s={settings} nav={nav} />
       <FloatingWhatsApp number={settings.whatsappNumber} />
       <MobileCTA price={settings.ticketPrice} chargeMode={settings.chargeMode} />
       </SmoothScroll>

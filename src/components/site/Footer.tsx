@@ -3,17 +3,10 @@ import type { SiteSettings } from "@/lib/types";
 import { BUSINESS_NAME } from "@/lib/types";
 import { formatWhatsappNumber, whatsappLink } from "@/lib/whatsapp";
 
-const LINKS = [
-  ["#sobre", "Sobre"],
-  ["#atracoes", "Atrações"],
-  ["#galeria", "Galeria"],
-  ["#comidas", "Comidas"],
-  ["#reservar", "Reservar"],
-  ["#perguntas", "Dúvidas"],
-  ["#localizacao", "Localização"],
-] as const;
+import type { NavItem } from "@/components/site/Header";
 
-export function Footer({ s }: { s: SiteSettings }) {
+export function Footer({ s, nav }: { s: SiteSettings; nav: readonly NavItem[] }) {
+  const LINKS = nav.filter(([href]) => href !== "#inicio");
   return (
     <footer className="relative overflow-hidden bg-forest-950 pt-16 pb-6 text-white/80">
       {/* Onda de entrada + brilho orgânico */}
